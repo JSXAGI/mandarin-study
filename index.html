@@ -2,970 +2,563 @@
 <meta name="google" content="notranslate">
 <head>
    <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>北京語学習</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+   <title>北京語学習 - 2026 Special Edition</title>
    <style>
     :root {
       --bg-image: url('https://raw.githubusercontent.com/JSXAGI/mandarin-study/main/mandarin.jpg');
       --bg-color: #fef3c7;
-      --surface-color: rgba(255, 255, 255, 0.8);
-      --text-color: #1e293b;
-      --primary-color: #f59e0b;
-      --secondary-color: #8b5cf6;
-      --accent-color: #10b981;
+      --surface-color: rgba(255, 255, 255, 0.95);
+      --text-color: #000000;
+      --primary-color: #d97706; 
+      --secondary-color: #4f46e5;
       --header-height: 100px;
     }  
-      * { box-sizing: border-box; font-family: 'Segoe UI', Meiryo, sans-serif; }
-      body, html { 
-      margin: 0; 
-      padding: 0; /* paddingを0にして、container側で調整します */
-      min-height: 100vh;
+    * { box-sizing: border-box; font-family: 'Segoe UI', Meiryo, sans-serif; }
+    body, html { 
+      margin: 0; padding: 0; min-height: 100vh;
       background-color: var(--bg-color);
       background-image: var(--bg-image);
       background-size: cover;
       background-position: left 20% center !important;
-      background-attachment: fixed; /* 背景を固定 */
-      background-repeat: no-repeat;
+      background-attachment: fixed;
       color: var(--text-color); 
-      overflow-x: hidden; 
-      }
-      .app-header {
-      position: fixed; top: 0; left: 0; right: 0; height: var(--header-height);
-      background-color: #ffffff00; display: flex; align-items: center; padding: 0 0px;      
-      }
-      .home-link {
-      pointer-events: auto;
-      position: absolute !important;
-      left: 20px !important; /* 50だと寄りすぎなので20に */
-      top: 15px !important;
-      background: white; color: var(--primary-color); padding: 3px 3px; border-radius: 5px;
-      font-weight: bold; font-size: 2rem; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px;
-      }
-      .main-content { margin-top: calc(var(--header-height) + 20px); padding: 100px; max-width: 800px; margin: auto; }
-      .card { background: var(--surface-color); border-radius: 20px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 4px solid #fff; margin-bottom: 20px; }
-      .level-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0; }
-      .btn-lvl { padding: 10px; border-radius: 12px; border: 3px solid #cbd5e1; font-weight: bold; cursor: pointer; background: #f1f5f9; }
-      .btn-lvl.active { border-color: var(--primary-color); background: white; color: var(--primary-color); transform: scale(1.05); }
-      .btn { cursor: pointer; border: none; border-radius: 12px; padding: 10px; font-weight: bold; font-size: 1.1rem; display: inline-flex; align-items: center; justify-content: center; transition: 0.2s; }
-      .btn-primary { background-color: var(--primary-color); color: white; width: 100%; }
-      .lang-row { background: #f8fafc; padding: 10px 15px; border-radius: 15px; margin-bottom: 8px; border: 1px solid #e2e8f0; }
-      .lang-label { font-size: 0.75rem; color: #64748b; font-weight: bold; }
-      .lang-text { font-size: 1.6rem; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
-      /* スピーカーボタンの押しやすさを少し向上（安定版） */
-      .btn-speak {
-      background: #e2e8f0; 
-      border: none; 
-      padding: 12px 16px !important; /* 少し広げる */
-      border-radius: 8px; 
-      cursor: pointer; 
-      font-size: 1.4rem !important; /* 1.2から1.4へ微増 */
-      }
-      .hidden { display: none; }
-      .text-center { text-align: center; }
-      .badge { padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; background: var(--secondary-color); color: white; margin: 2px; display: inline-block; }
-      /* --- アクセシビリティ強化：マウスが見えやすい工夫 --- */
-      /* 1. ボタンにマウスが乗った時に、劇的に色を変えて大きくする */
-      .btn:hover, .btn-speak:hover {
-      background-color: #ff9800 !important; /* 目立つオレンジ色 */
-      color: white !important;              /* 文字を白くしてクッキリ */
-      transform: scale(1.15);              /* ボタンを1.15倍に拡大 */
-      box-shadow: 0 0 25px rgba(255, 152, 0, 0.8); /* オレンジ色の光を放つ */
-      z-index: 10;                         /* 他の要素より前に出す */
-      transition: all 0.2s ease-in-out;    /* 動きを滑らかに */
-      }
-      /* 2. マウスカーソルを常に「指差しマーク」にする（見つけやすくするため） */
-      body {
-      cursor: pointer; 
-      }
-      /* 3. 単語や文法の文字サイズを少しだけ大きくして、読みやすくする */
-      .lang-text {
-      font-size: 1.25rem;
-      font-weight: 500;
-      }
-      /* --- 追加のアクセシビリティ改善：コントラストとボタン強化 --- */
-      /* 1. 【単語学習】下の「←」「Next」ボタンを巨大化してクッキリさせる */
-      #vocabulary-view .btn {
-      font-size: 1.6rem !important; /* 矢印と文字を大きく */
-      font-weight: 800 !important; /* 極太にする */
-      padding: 20px 10px !important;
-      border: 3px solid #64748b !important; /* 濃いグレーの枠線で存在感を出す */
-      background-color: #ffffff !important; /* 背景を白にしてコントラストを上げる */
-      color: #1e293b !important;
-      }
-      /* 3. 【文法学習】英語部分の読みやすさを改善 */
-      [id^="g-en-"] {
-      font-family: 'Verdana', 'Arial', sans-serif !important;
-      font-weight: 700 !important; /* 太字に */
-      color: #0f172a !important;   /* 真っ黒に近い紺 */
-      display: inline-block;
-      margin-left: 5px;
-      }
-      /* 4. 文法カード内の説明文（日本語）を読みやすく */
-      .card div[style*="color: #444"], 
-      .card span[style*="color: #666"] {
-      color: #1e293b !important; /* 文字色を濃く */
-      font-size: 1.1rem !important; /* 少し大きく */
-      line-height: 1.6 !important; /* 行間を広げて読みやすく */
-      }
-      /* 5. ボディの背景を少しだけ落ち着かせて眩しさを抑える（任意） */
-      body {
-      background-color: #fffbeb !important; /* 柔らかいクリーム色（#fef3c7より少し白に近い） */
-      }
-      /* --- アクセシビリティ最終調整：コントラストと巨大ボタン --- */
-      /* 1. 【単語学習】ボタンを「見やすく、かつ、うるさくない」デザインに改善 */
-      #vocabulary-view .btn {
-      font-size: 1.3rem !important;  /* 少しサイズを落とす */
-      font-weight: 700 !important;   /* 適度な太字 */
-      padding: 12px 18px !important;
-      border: 2px solid #94a3b8 !important; /* 枠線を細く、色をマイルドに */
-      background-color: rgba(255, 255, 255, 0.9) !important; /* わずかに透明感 */
-      color: #334155 !important;    /* 落ち着いた濃いグレー */
-      min-width: 150px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* 影を柔らかく */
-      letter-spacing: 1px;
-      }
-      /* マウスが乗った時だけ、元気に反応するようにする */
-      #vocabulary-view .btn:hover {
-      background-color: #f59e0b !important; /* 乗った時だけオレンジに */
-      color: white !important;
-      border-color: #f59e0b !important;
-      }
-      /* 2. 【文法学習】北京語（メイン）をシャープで見やすく調整 */
-      [id^="g-sw-"] {
-      color: #9a3412 !important;    /* 視認性の高い濃い色 */
-      font-size: 1.5rem !important; /* ほどよい大きさに微調整 */
-      font-weight: 600 !important;  /* ★太さを抑えて文字の潰れを防止 */
-      letter-spacing: 0.05em !important; /* ★文字の間隔を広げてクッキリさせる */
-      display: block;
-      line-height: 1.4;
-      margin: 5px 0;
-      }
-      /* 3. 【文法学習】英語（米語）をクッキリした紺色に */
-      [id^="g-en-"] {
-      font-family: 'Verdana', sans-serif !important;
-      font-weight: 700 !important;
-      color: #1e3a8a !important;    /* 濃い青 */
-      }
-      /* 4. 【文法学習】北京語の「解説文（日本語）」を真っ黒にして読みやすく */
-      .card span[style*="color: #666"],
-      .card div[style*="margin-top: 10px"] span {
-      color: #000000 !important;    /* 最高のコントラスト（黒） */
-      font-size: 1.2rem !important; /* 文字サイズをアップ */
-      font-weight: 500 !important;
-      line-height: 1.6 !important;
-      }
-      /* --- 文法カードのタイトル（「基本の挨拶」など）をクッキリさせる --- */
-      /* タイトル部分の透明度をなくし、背景色をつけて目立たせる */
-      .card div[style*="font-size: 0.8rem"] {
-      font-size: 1.1rem !important;    /* 文字を大きく */
-      color: #ffffff !important;       /* 文字は白 */
-      background-color: #8b5cf6 !important; /* 背景を紫（セカンダリーカラー）に */
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 8px;
-      opacity: 1 !important;           /* 透明度を解除してハッキリ */
-      margin-bottom: 12px !important;
-      font-weight: bold !important;
-      box-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-      }
-      /* --- スマホ専用：デザイン修正（原本コピー用） --- */
-      @media screen and (max-width: 600px) {
-      /* 1. 画面全体の余白を削る（PC用の40pxが広すぎたため） */
-      body, html { padding: 0 !important; }
-      .main-content { padding: 10px 5px !important; margin-top: 80px !important; }
-      /* 2. ヘッダーの「終了方法」ボックスをスマホでは完全に隠す */
-      .app-header div[style*="width: 650px"] {
-      display: none !important;
-      }
-      /* 3. 白いカードの固定高さを解除（これで重なりが消えます） */
-      .card {
-      width: 95% !important;
-      height: auto !important;
-      min-height: auto !important;
-      padding: 20px 10px !important;
-      margin: 10px auto !important;
-      display: block !important;
-      }
-      /* 4. レベル選択（初級・中級・上級）を横長の大きなボタンにして並べる */
-      .level-selector {
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 12px !important;
-      height: auto !important;
-      writing-mode: horizontal-tb !important;
-      }
-      .btn-lvl {
-      width: 100% !important;
-      height: 75px !important; /* 押しやすい高さ */
-      min-height: 75px !important;
-      writing-mode: horizontal-tb !important;
-      font-size: 1.25rem !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      border-radius: 12px !important;
-      position: static !important; /* 重なり防止 */
-      transform: none !important;
-      margin: 0px !important;
-      }
-      /* 5. 下の「単語・文法」ボタンを横並びで大きく */
-      .activity-select {
-      display: flex !important;
-      flex-direction: row !important;
-      gap: 10px !important;
-      width: 100% !important;
-      }
-      .btn-act {
-      width: 48% !important;
-      height: 120px !important;
-      font-size: 1.1rem !important;
-      }
-      /* 6. おまじない：タップ時の青い影と枠を消す */
-      button, .audio-btn, .nav-btn {
-      -webkit-tap-highlight-color: transparent;
-      outline: none;
-      }
-      /* 7. 中学生向けの洗練された文字サイズ調整 */
-      .display-word, .kiswahili-text {
-      font-size: 1.3rem !important;
-      line-height: 1.3 !important;
-      color: #5d4037 !important;
-      }
-      .language-label {
-      font-size: 0.7rem !important;
-      color: #999 !important;
-      margin-bottom: 2px !important;
-      }
-      } /* ← ここで600px以下の設定を閉じます */
-      /* ここから下を既存の style の最後に追加してください */
-      @media screen and (max-width: 480px) {
-      /* スマホ版だけの特別な設定 */
-      body {
-      padding: 10px; /* 画面端の余白を少し詰める */
-      background-color: #fcfaf5; /* 優しい色に */
-      }
-      /* 文字を全体的に少し小さく、上品に */
-      h2, .level-select-title {
-      font-size: 1.1rem !important;
-      margin-bottom: 15px !important;
-      }
-      /* 各カードの調整 */
-      #words-page .card, #grammar-page .card, .level-card {
-      padding: 18px !important;
-      border-radius: 15px !important;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
-      }
-      /* 単語・例文の文字サイズを「中学生向け」に微調整 */
-      .display-word, .kiswahili-text {
-      font-size: 1.3rem !important; /* 少し小さく */
-      line-height: 1.3 !important;
-      color: #5d4037 !important; /* 濃い茶色で知的に */
-      }
-      /* ラベル（English, 日本語など）を控えめに */
-      .language-label {
-      font-size: 0.7rem !important;
-      color: #999 !important;
-      margin-bottom: 2px !important;
-      }
-      /* ボタン類をスッキリさせる */
-      .btn, .nav-btn {
-      padding: 8px 15px !important;
-      font-size: 0.9rem !important;
-      border-radius: 8px !important;
-      }
-      /* スピーカーアイコンのサイズ調整 */
-      .audio-icon {
-      width: 32px !important;
-      height: 32px !important;
-      }
-      }
-      /* 追加ここまで */
+    }
+
+    /* ヘッダー：お爺さんこだわりの縁取り文字 */
+    .app-header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-height); display: flex; align-items: center; z-index: 1000; }
+    .home-link { position: absolute; left: 20px; background: #fff; color: #000; padding: 8px; border-radius: 12px; font-size: 2.2rem; border: 3px solid #000; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+    
+    #mode-title {
+      flex-grow: 1; text-align: center; color: #EF4123; 
+      text-shadow: 2px 2px 0px #fff, -2px -2px 0px #fff, 2px -2px 0px #fff, -2px 2px 0px #fff, 0px 4px 10px rgba(0,0,0,0.5);
+      font-weight: bold; font-size: 2rem;
+    }
+
+    .main-content { margin-top: calc(var(--header-height) + 10px); padding: 15px; max-width: 600px; margin-left: auto; margin-right: auto; }
+    
+    /* カードデザイン：視認性向上のため枠線を太く */
+    .card { background: var(--surface-color); border-radius: 20px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 3px solid #000; margin-bottom: 20px; }
+    
+    /* 巨大ボタン */
+    .btn { cursor: pointer; border: 3px solid #000; border-radius: 15px; padding: 15px; font-weight: bold; font-size: 1.3rem; width: 100%; margin-bottom: 12px; transition: 0.2s; }
+    .btn-primary { background-color: var(--primary-color); color: white; }
+    .btn-lvl { background: #fff; color: #000; font-size: 1.1rem; padding: 10px; }
+    .btn-lvl.active { background: #000; color: #fff; transform: scale(1.05); }
+    
+    /* 言語表示：お目が不自由な方でも分かりやすく */
+    .lang-row { background: #fff; padding: 12px; border-radius: 15px; margin-bottom: 10px; border: 2px solid #000; }
+    .lang-label { font-size: 0.8rem; color: #444; font-weight: bold; margin-bottom: 4px; text-decoration: underline; }
+    .lang-text { font-size: 1.8rem; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+    
+    /* スピーカーボタン：押しやすさ最大 */
+    .btn-speak { background: #eee; border: 3px solid #000; padding: 15px; border-radius: 50%; cursor: pointer; font-size: 2rem; min-width: 70px; min-height: 70px; display: flex; align-items: center; justify-content: center; }
+    .btn-speak:active { background: #aaa; }
+
+    .hidden { display: none; }
+    .text-center { text-align: center; }
+
+    /* クエストエリア */
+    #quest-area { border: 4px solid var(--secondary-color); background: #fff; }
    </style>
-   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 </head>
 <body>
    <header class="app-header">
-      <button class="home-link" onclick="showView('home')">
-      🏠
-      </button>
-      <div style="flex-grow: 1; text-align: center; color: #EF4123; text-shadow: 2px 2px 0px #4d7b80, 2px -2px 0px #4d7b80, -2px 2px 0px #4d7b80, -2px -2px 0px #4d7b80, 0px 0px 12px rgba(0,0,0,0.9);
-         font-weight: bold; font-size: 2rem; margin-right: 15px;" id="mode-title">北京語学習</div>
+      <button class="home-link" onclick="showView('home')">🏠</button>
+      <div id="mode-title">北京語学習</div>
    </header>
+
    <main class="main-content">
       <div id="home-view">
          <div class="card text-center">
-            <h2>1. Level / レベル選択</h2>
-            <div class="level-selector">
-               <button class="btn-lvl active" id="lvl-Beginner" onclick="setLevel('Beginner')">初級<br>小3~</button>
-               <button class="btn-lvl" id="lvl-Intermediate" onclick="setLevel('Intermediate')">中級<br>中学</button>
-               <button class="btn-lvl" id="lvl-Advanced" onclick="setLevel('Advanced')">上級<br>高校~</button>
+            <h2 style="margin:0 0 10px 0; font-size: 1.2rem;">1. レベル選択</h2>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+               <button class="btn btn-lvl active" id="lvl-Beginner" onclick="setLevel('Beginner')">初級</button>
+               <button class="btn btn-lvl" id="lvl-Intermediate" onclick="setLevel('Intermediate')">中級</button>
+               <button class="btn btn-lvl" id="lvl-Advanced" onclick="setLevel('Advanced')">上級</button>
             </div>
          </div>
-         <div class="card text-center">
-            <h2>2. Activity / 学習内容</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-               <button class="btn btn-primary" onclick="showView('vocabulary')">📚 Words<br>単語</button>
-               <button class="btn btn-primary" style="background-color: var(--secondary-color);" onclick="showView('grammar-choice')">✏️ Grammar<br>文法</button>
-            </div>
+         <div class="card">
+            <h2 class="text-center" style="margin:0 0 15px 0; font-size: 1.2rem;">2. 学習メニュー</h2>
+            <button class="btn btn-primary" onclick="showView('vocabulary')">📚 単語カード</button>
+            <button class="btn" style="background-color: var(--secondary-color); color:white;" onclick="showView('grammar')">✏️ 文法解説</button>
+         </div>
+         <div id="quest-area" class="card text-center">
+            <h3 style="margin:0; color:var(--secondary-color);">🎧 Listening Quest</h3>
+            <div id="q-box" style="margin: 15px 0; font-size: 1.2rem; min-height: 50px;"></div>
+            <div id="a-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;"></div>
+            <button id="q-start" class="btn btn-primary" style="background:#059669; margin-top:15px;" onclick="startQuest()">クエスト開始</button>
          </div>
       </div>
+
       <div id="vocabulary-view" class="hidden">
          <div class="card text-center">
-            <div><span class="badge" id="v-lvl-badge"></span><span class="badge" id="v-cat-badge" style="background:var(--accent-color)"></span></div>
-            <div id="v-emoji" style="font-size: 5rem; margin: 0px 0;"></div>
+            <div id="v-emoji" style="font-size: 6rem; margin-bottom:10px;"></div>
             <div class="lang-row">
-               <div class="lang-label">English</div>
-               <div class="lang-text"><span id="v-en"></span><button class="btn-speak" onclick="speak('en')">🔊</button></div>
+               <div class="lang-label">北京語</div>
+               <div class="lang-text"><span id="v-zh"></span><button class="btn-speak" onclick="speak('v-zh','zh-CN')">🔊</button></div>
             </div>
             <div class="lang-row">
-               <div class="lang-label">中文（北京语）</div>
-               <div class="lang-text"><span id="v-sw"></span><button class="btn-speak" onclick="speak('sw')">🔊</button></div>
+               <div class="lang-label">English</div>
+               <div class="lang-text"><span id="v-en" style="font-size: 1.4rem;"></span><button class="btn-speak" onclick="speak('v-en','en-US')">🔊</button></div>
             </div>
             <div class="lang-row">
                <div class="lang-label">日本語</div>
-               <div class="lang-text"><span id="v-ja"></span><button class="btn-speak" onclick="speak('ja')">🔊</button></div>
+               <div class="lang-text"><span id="v-ja" style="font-size: 1.6rem;"></span><button class="btn-speak" onclick="speak('v-ja','ja-JP')">🔊</button></div>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 5px; margin-top: 5px;">
-               <button class="btn" style="background: #e2e8f0;" onclick="changeWord(-1)">◀ BACK</button>
-               <button class="btn btn-primary" onclick="changeWord(1)">NEXT ▶</button>
-            </div>
-         </div>
-      </div>
-      <div id="grammar-choice-view" class="hidden">
-         <div class="card text-center">
-            <h2>文法レベルを選んでください</h2>
-            <div style="display: grid; gap: 10px; margin-top: 20px;">
-               <button class="btn btn-primary" onclick="setLevel('Beginner'); showView('grammar')">初級文法</button>
-               <button class="btn btn-primary" style="background-color: var(--secondary-color);" onclick="setLevel('Intermediate'); showView('grammar')">中級文法</button>
-               <button class="btn btn-primary" style="background-color: var(--accent-color);" onclick="setLevel('Advanced'); showView('grammar')">上級文法</button>
-               <button class="btn" style="background: #e2e8f0; margin-top: 10px;" onclick="showView('home')">戻る</button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+               <button class="btn" style="background: #e2e8f0;" onclick="changeVocab(-1)">◀ 前へ</button>
+               <button class="btn btn-primary" onclick="changeVocab(1)">次へ ▶</button>
             </div>
          </div>
       </div>
+
       <div id="grammar-view" class="hidden">
-         <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-               <button class="btn" style="padding: 5px 15px; background: #e2e8f0;" onclick="showView('grammar-choice')">← 戻る</button>
-               <span class="badge" id="g-lvl-badge"></span>
-            </div>
-            <div id="grammar-list">
-            </div>
-         </div>
+         <div id="grammar-list"></div>
+         <button class="btn btn-primary" style="background:#475569;" onclick="showView('home')">メニューに戻る</button>
       </div>
    </main>
-   <script>
-      /* ================= 単語データ ================= */
-      const vocabularyData = [
-        /* 初級 */
-        { en:"Family",  sw:"家庭 jiātíng", ja:"家族(かぞく)", emoji:"👨‍👩‍👧‍👦", level:"Beginner", category:"Life"},
-        { en:"Home",    sw:"家 zhùjiā",     ja:"家(いえ)",     emoji:"🏠", level:"Beginner", category:"Life"},
-        { en:"Kitchen", sw:"厨房 chúfáng",  ja:"台所(だいどころ)", emoji:"🍳", level:"Beginner", category:"Life"},
-        { en:"Window",  sw:"窗户 chuānghu", ja:"窓(まど)",     emoji:"🪟", level:"Beginner", category:"Life"},
-        { en:"Door",    sw:"门 mén",        ja:"扉(とびら)",   emoji:"🚪", level:"Beginner", category:"Life"},
-        { en:"Soap", sw:"肥皂 féizào", ja:"石鹸(せっけん)", emoji:"🧼", level:"Beginner", category:"Life" },
-      { en:"Towel", sw:"毛巾 máojīn", ja:"タオル(たおる)", emoji:"🧣", level:"Beginner", category:"Life" },
-      { en:"Bed", sw:"床 chuáng", ja:"寝台(べっど)", emoji:"🛏️", level:"Beginner", category:"Life" },
-      { en:"Key", sw:"钥匙 yàoshi", ja:"鍵(かぎ)", emoji:"🔑", level:"Beginner", category:"Life" },
-      { en:"Money", sw:"钱 qián", ja:"お金(おかね)", emoji:"💰", level:"Beginner", category:"Life" },
-      
-      { en:"Teacher", sw:"老师 lǎoshī", ja:"先生(せんせい)", emoji:"🧑‍🏫", level:"Beginner", category:"School" },
-      { en:"Student", sw:"学生 xuéshēng", ja:"生徒(せいと)", emoji:"🧑‍🎓", level:"Beginner", category:"School" },
-      { en:"Classroom", sw:"教室 jiàoshì", ja:"教室(きょうしつ)", emoji:"🏫", level:"Beginner", category:"School" },
-      { en:"Desk", sw:"桌子 zhuōzi", ja:"机(つくえ)", emoji:"🪑", level:"Beginner", category:"School" },
-      { en:"Paper", sw:"纸 zhǐ", ja:"紙(かみ)", emoji:"📄", level:"Beginner", category:"School" },
-      { en:"Pencil", sw:"铅笔 qiānbǐ", ja:"鉛筆(えんぴつ)", emoji:"✏️", level:"Beginner", category:"School" },
-      { en:"Eraser", sw:"橡皮 xiàngpí", ja:"消しゴム(けしごむ)", emoji:"🧽", level:"Beginner", category:"School" },
-      { en:"Bag", sw:"书包 shūbāo", ja:"鞄(かばん)", emoji:"🎒", level:"Beginner", category:"School" },
-      { en:"Friend", sw:"朋友 péngyou", ja:"友達(ともだち)", emoji:"🤝", level:"Beginner", category:"School" },
-      { en:"Homework", sw:"作业 zuòyè", ja:"宿題(しゅくだい)", emoji:"📝", level:"Beginner", category:"School" },
-      
-      { en:"Rice", sw:"米饭 mǐfàn", ja:"ご飯(ごはん)", emoji:"🍚", level:"Beginner", category:"Food" },
-      { en:"Bread", sw:"面包 miànbāo", ja:"パン(ぱん)", emoji:"🍞", level:"Beginner", category:"Food" },
-      { en:"Egg", sw:"鸡蛋 jīdàn", ja:"卵(たまご)", emoji:"🥚", level:"Beginner", category:"Food" },
-      { en:"Meat", sw:"肉 ròu", ja:"肉(にく)", emoji:"🍖", level:"Beginner", category:"Food" },
-      { en:"Vegetable", sw:"蔬菜 shūcài", ja:"野菜(野菜)", emoji:"🥦", level:"Beginner", category:"Food" },
-      { en:"Fruit", sw:"水果 shuǐguǒ", ja:"果物(くだもの)", emoji:"🍎", level:"Beginner", category:"Food" },
-      { en:"Tea", sw:"茶 chá", ja:"茶(ちゃ)", emoji:"🍵", level:"Beginner", category:"Food" },
-      { en:"Milk", sw:"牛奶 niúnǎi", ja:"牛乳(ぎゅうにゅう)", emoji:"🥛", level:"Beginner", category:"Food" },
-      { en:"Salt", sw:"盐 yán", ja:"塩(しお)", emoji:"🧂", level:"Beginner", category:"Food" },
-      { en:"Sugar", sw:"糖 táng", ja:"砂糖(さとう)", emoji:"🍬", level:"Beginner", category:"Food" },
-      
-      { en:"Body", sw:"身体 shēntǐ", ja:"体(からだ)", emoji:"🧍", level:"Beginner", category:"Body" },
-      { en:"Head", sw:"头 tóu", ja:"頭(あたま)", emoji:"🙆", level:"Beginner", category:"Body" },
-      { en:"Face", sw:"脸 liǎn", ja:"顔(かお)", emoji:"😊", level:"Beginner", category:"Body" },
-      { en:"Hair", sw:"头发 tóufa", ja:"髪(かみ)", emoji:"💇", level:"Beginner", category:"Body" },
-      { en:"Eye", sw:"眼睛 yǎnjīng", ja:"目(め)", emoji:"👁️", level:"Beginner", category:"Body" },
-      { en:"Ear", sw:"耳朵 ěrduo", ja:"耳(みみ)", emoji:"👂", level:"Beginner", category:"Body" },
-      { en:"Nose", sw:"鼻子 bízi", ja:"鼻(はな)", emoji:"👃", level:"Beginner", category:"Body" },
-      { en:"Mouth", sw:"嘴 zuǐ", ja:"口(くち)", emoji:"👄", level:"Beginner", category:"Body" },
-      { en:"Tooth", sw:"牙齿 yáchǐ", ja:"歯(は)", emoji:"🦷", level:"Beginner", category:"Body" },
-      { en:"Arm", sw:"胳膊 gēbo", ja:"腕(うで)", emoji:"💪", level:"Beginner", category:"Body" },
-      { en:"Leg", sw:"腿 tuǐ", ja:"脚(あし)", emoji:"🦵", level:"Beginner", category:"Body" },
-      { en:"Heart", sw:"心脏 xīnzàng", ja:"心臓(しんぞう)", emoji:"❤️", level:"Beginner", category:"Body" },
-      
-      { en:"Sun", sw:"太阳 tàiyáng", ja:"太陽(たいよう)", emoji:"☀️", level:"Beginner", category:"Nature" },
-      { en:"Moon", sw:"月亮 yuèliang", ja:"月(つき)", emoji:"🌙", level:"Beginner", category:"Nature" },
-      { en:"Star", sw:"星星 xīngxing", ja:"星(ほし)", emoji:"⭐", level:"Beginner", category:"Nature" },
-      { en:"Sky", sw:"天空 tiānkōng", ja:"空(そら)", emoji:"☁️", level:"Beginner", category:"Nature" },
-      { en:"Rain", sw:"雨 yǔ", ja:"雨(あめ)", emoji:"☔", level:"Beginner", category:"Nature" },
-      { en:"Wind", sw:"风 fēng", ja:"風(かぜ)", emoji:"🌬️", level:"Beginner", category:"Nature" },
-      { en:"Flower", sw:"花 huā", ja:"花(はな)", emoji:"🌻", level:"Beginner", category:"Nature" },
-      { en:"Mountain", sw:"山 shān", ja:"山(やま)", emoji:"⛰️", level:"Beginner", category:"Nature" },
-      { en:"River", sw:"河 hé", ja:"川(かわ)", emoji:"🏞️", level:"Beginner", category:"Nature" },
-      { en:"Earth", sw:"地球 dìqiú", ja:"地球(ちきゅう)", emoji:"🌍", level:"Beginner", category:"Nature" },
-      
-      { en:"Animal", sw:"动物 dòngwù", ja:"動物(どうぶつ)", emoji:"🐾", level:"Beginner", category:"Animal" },
-      { en:"Dog", sw:"狗 gǒu", ja:"犬(いぬ)", emoji:"🐶", level:"Beginner", category:"Animal" },
-      { en:"Cat", sw:"猫 māo", ja:"猫(ねこ)", emoji:"🐱", level:"Beginner", category:"Animal" },
-      { en:"Bird", sw:"鸟 niǎo", ja:"鳥(とり)", emoji:"🐦", level:"Beginner", category:"Animal" },
-      { en:"Elephant", sw:"大象 dàxiàng", ja:"象(ぞう)", emoji:"🐘", level:"Beginner", category:"Animal" },
-      { en:"Lion", sw:"狮子 shīzi", ja:"獅子(しし)", emoji:"🦁", level:"Beginner", category:"Animal" },
-      { en:"Giraffe", sw:"长颈鹿 chángjǐnglù", ja:"麒麟(きりん)", emoji:"🦒", level:"Beginner", category:"Animal" },
-      { en:"Snake", sw:"蛇 shé", ja:"蛇(へび)", emoji:"🐍", level:"Beginner", category:"Animal" },
-      { en:"Fish", sw:"鱼 yú", ja:"魚(さかな)", emoji:"🐟", level:"Beginner", category:"Animal" },
-      { en:"Bee", sw:"蜜蜂 mìfēng", ja:"蜂(はち)", emoji:"🐝", level:"Beginner", category:"Animal" },
-      
-      { en:"Car", sw:"汽车 qìchē", ja:"車(くるま)", emoji:"🚗", level:"Beginner", category:"Town" },
-      { en:"Bicycle", sw:"自行车 zìxíngchē", ja:"自転車(じてんしゃ)", emoji:"🚲", level:"Beginner", category:"Town" },
-      { en:"Bus", sw:"公共汽车 gōnggòng qìchē", ja:"バス(ばす)", emoji:"🚌", level:"Beginner", category:"Town" },
-      { en:"Market", sw:"市场 shìchǎng", ja:"市場(いちば)", emoji:"🛒", level:"Beginner", category:"Town" },
-      { en:"Hospital", sw:"医院 yīyuàn", ja:"病院(びょういん)", emoji:"🏥", level:"Beginner", category:"Town" },
-      { en:"Road", sw:"道路 dàolù", ja:"道路(どうろ)", emoji:"🛣️", level:"Beginner", category:"Town" },
-      { en:"Bridge", sw:"桥 qiáo", ja:"橋(はし)", emoji:"🌉", level:"Beginner", category:"Town" },
-      { en:"Clothes", sw:"衣服 yīfu", ja:"服(ふく)", emoji:"👕", level:"Beginner", category:"Town" },
-      { en:"Shoe", sw:"鞋 xié", ja:"靴(くつ)", emoji:"👟", level:"Beginner", category:"Town" },
-      { en:"Hat", sw:"帽子 màozi", ja:"帽子(ぼうし)", emoji:"👒", level:"Beginner", category:"Town" },
-      
-      { en:"Today", sw:"今天 jīntiān", ja:"今日(きょう)", emoji:"📅", level:"Beginner", category:"Time" },
-      { en:"Now", sw:"现在 xiànzài", ja:"今(いま)", emoji:"⏰", level:"Beginner", category:"Time" },
-      { en:"Day", sw:"白天 báitiān", ja:"昼(ひる)", emoji:"☀️", level:"Beginner", category:"Time" },
-      { en:"Night", sw:"夜晚 yèwǎn", ja:"夜(よる)", emoji:"🌙", level:"Beginner", category:"Time" },
-      { en:"Morning", sw:"早上 zǎoshang", ja:"朝(あさ)", emoji:"🌅", level:"Beginner", category:"Time" },
-      { en:"Sunday", sw:"星期日 xīngqīrì", ja:"日曜日(にちようび)", emoji:"⛪", level:"Beginner", category:"Time" },
-      { en:"Monday", sw:"星期一 xīngqīyī", ja:"月曜日(げつようび)", emoji:"🌙", level:"Beginner", category:"Time" },
-      { en:"Summer", sw:"夏天 xiàtiān", ja:"夏(なつ)", emoji:"🌻", level:"Beginner", category:"Time" },
-      { en:"Winter", sw:"冬天 dōngtiān", ja:"冬(ふゆ)", emoji:"❄️", level:"Beginner", category:"Time" },
-      
-      { en:"Red", sw:"红色 hóngsè", ja:"赤(あか)", emoji:"🔴", level:"Beginner", category:"Color" },
-      { en:"Blue", sw:"蓝色 lán sè", ja:"青(あお)", emoji:"🔵", level:"Beginner", category:"Color" },
-      { en:"Green", sw:"绿色 lǜsè", ja:"緑(みどり)", emoji:"🟢", level:"Beginner", category:"Color" },
-      { en:"Yellow", sw:"黄色 huángsè", ja:"黄色(きいろ)", emoji:"🟡", level:"Beginner", category:"Color" },
-      { en:"White", sw:"白色 báisè", ja:"白(しろ)", emoji:"⚪", level:"Beginner", category:"Color" },
-      { en:"Black", sw:"黑色 hēisè", ja:"黒(くろ)", emoji:"⚫", level:"Beginner", category:"Color" },
-      
-      { en:"One", sw:"一 yī", ja:"一(いち)", emoji:"1️⃣", level:"Beginner", category:"Number" },
-      { en:"Five", sw:"五 wǔ", ja:"五(ご)", emoji:"5️⃣", level:"Beginner", category:"Number" },
-      { en:"Ten", sw:"十 shí", ja:"十(じゅう)", emoji:"🔟", level:"Beginner", category:"Number" },
-      
-      { en:"Good", sw:"好 hǎo", ja:"良い(よい)", emoji:"👍", level:"Beginner", category:"Action" },
-      { en:"Bad", sw:"坏 huài", ja:"悪い(わるい)", emoji:"👎", level:"Beginner", category:"Action" },
-      { en:"Big", sw:"大 dà", ja:"大きい(おおきい)", emoji:"🐘", level:"Beginner", category:"Action" },
-      { en:"Small", sw:"小 xiǎo", ja:"小さい(ちいさい)", emoji:"🐜", level:"Beginner", category:"Action" },
-      { en:"Happy", sw:"高兴 gāoxìng", ja:"幸せ(しあわせ)", emoji:"😊", level:"Beginner", category:"Action" },
-      { en:"Hot", sw:"热 rè", ja:"熱い(あつい)", emoji:"🔥", level:"Beginner", category:"Action" },
-      { en:"Cold", sw:"冷 lěng", ja:"寒い(さむい)", emoji:"❄️", level:"Beginner", category:"Action" },
-      { en:"Walk", sw:"走 zǒu", ja:"歩く(あるく)", emoji:"🚶", level:"Beginner", category:"Action" },
-      { en:"Run", sw:"跑 pǎo", ja:"走る(はしる)", emoji:"🏃", level:"Beginner", category:"Action" },
-      { en:"Play", sw:"玩 wán", ja:"遊ぶ(あそぶ)", emoji:"🎮", level:"Beginner", category:"Action" },
-      
-        /* 中級 */
-        { en:"Experience",  sw:"经验 jīngyàn", ja:"経験(けいけん)", emoji:"🧪", level:"Intermediate", category:"Abstract"},
-        { en:"Government",  sw:"政府 zhèngfǔ", ja:"政府(せいふ)",   emoji:"🏛️", level:"Intermediate", category:"Society"},
-        { en:"Economy",     sw:"经济 jīngjì",  ja:"経済(けいざい)", emoji:"💹", level:"Intermediate", category:"Society"},
-        { en:"Environment", sw:"环境 huánjìng",ja:"環境(かんきょう)", emoji:"🌳", level:"Intermediate", category:"Nature"},
-        { en:"Education",   sw:"教育 jiàoyù",  ja:"教育(きょういく)", emoji:"🎓", level:"Intermediate", category:"School"},
-        { en: "Library", sw: "图书馆 túshūguǎn", ja: "図書館(としょかん)", emoji: "📚", level: "Intermediate", category: "Place" },
-      { en: "Experiment", sw: "实验 shíyàn", ja: "実験(じっけん)", emoji: "🧪", level: "Intermediate", category: "Science" },
-      { en: "History", sw: "历史 lìshǐ", ja: "歴史(れきし)", emoji: "📜", level: "Intermediate", category: "School" },
-      { en: "Future", sw: "未来 wèilái", ja: "未来(みらい)", emoji: "🚀", level: "Intermediate", category: "Time" },
-      { en: "Dream", sw: "梦想 mèngxiǎng", ja: "夢(ゆめ)", emoji: "💭", level: "Intermediate", category: "Abstract" },
-      { en: "Information", sw: "信息 xìnxī", ja: "情報(じょうほう)", emoji: "ℹ️", level: "Intermediate", category: "Daily" },
-      { en: "Technology", sw: "技术 jìshù", ja: "技術(ぎじゅつ)", emoji: "💻", level: "Intermediate", category: "Science" },
-      { en: "Invention", sw: "发明 fāmíng", ja: "発明(はつめい)", emoji: "💡", level: "Intermediate", category: "Science" },
-      { en: "Opportunity", sw: "机会 jīhuì", ja: "機会(きかい)", emoji: "🔑", level: "Intermediate", category: "Abstract" },
-      { en: "Relationship", sw: "关系 guānxi", ja: "関係(かんけい)", emoji: "👩‍❤️‍👨", level: "Intermediate", category: "People" },
-      
-      { en: "Culture", sw: "文化 wénhuà", ja: "文化(ぶんか)", emoji: "👘", level: "Intermediate", category: "Society" },
-      { en: "Tradition", sw: "传统 chuántǒng", ja: "伝統(でんとう)", emoji: "🏮", level: "Intermediate", category: "Society" },
-      { en: "Effort", sw: "努力 nǔlì", ja: "努力(どりょく)", emoji: "🔥", level: "Intermediate", category: "Abstract" },
-      { en: "Success", sw: "成功 chénggōng", ja: "成功(せいこう)", emoji: "🏆", level: "Intermediate", category: "Abstract" },
-      { en: "Challenge", sw: "挑战 tiǎozhàn", ja: "挑戦(ちょうせん)", emoji: "🧗", level: "Intermediate", category: "Abstract" },
-      
-      { en: "Medicine", sw: "药 yào", ja: "薬(くすり)", emoji: "💊", level: "Intermediate", category: "Health" },
-      { en: "Health", sw: "健康 jiànkāng", ja: "健康(けんこう)", emoji: "🥗", level: "Intermediate", category: "Health" },
-      { en: "Volunteer", sw: "志愿者 zhìyuànzhě", ja: "志願者(しがんしゃ)", emoji: "🙋", level: "Intermediate", category: "People" },
-      { en: "Election", sw: "选举 xuǎnjǔ", ja: "選挙(せんきょ)", emoji: "🗳️", level: "Intermediate", category: "Society" },
-      { en: "Passport", sw: "护照 hùzhào", ja: "旅券(りょけん)", emoji: "🛂", level: "Intermediate", category: "Travel" },
-      
-      { en: "Airport", sw: "机场 jīchǎng", ja: "空港(くうこう)", emoji: "✈️", level: "Intermediate", category: "Travel" },
-      { en: "Currency", sw: "货币 huòbì", ja: "通貨(つうか)", emoji: "💴", level: "Intermediate", category: "Economy" },
-      { en: "Message", sw: "信息 xìnxī", ja: "伝言(でんごん)", emoji: "📩", level: "Intermediate", category: "Daily" },
-      { en: "Celebrate", sw: "庆祝 qìngzhù", ja: "祝う(いわう)", emoji: "🎉", level: "Intermediate", category: "Action" },
-      { en: "Develop", sw: "发展 fāzhǎn", ja: "発展させる(はってんさせる)", emoji: "🏗️", level: "Intermediate", category: "Action" },
-      
-      { en: "Global", sw: "全球 quánqiú", ja: "地球規模の(ちきゅうきぼの)", emoji: "🌐", level: "Intermediate", category: "Nature" },
-      { en: "Freedom", sw: "自由 zìyóu", ja: "自由(じゆう)", emoji: "🕊️", level: "Intermediate", category: "Abstract" },
-      { en: "Justice", sw: "正义 zhèngyì", ja: "正義(せいぎ)", emoji: "⚖️", level: "Intermediate", category: "Society" },
-      { en: "Signal", sw: "信号 xìnhào", ja: "信号(しんごう)", emoji: "🚥", level: "Intermediate", category: "Town" },
-      { en: "Journey", sw: "旅行 lǚxíng", ja: "旅(たび)", emoji: "🧳", level: "Intermediate", category: "Travel" },
-      
-      { en: "Destination", sw: "目的地 mùdìdì", ja: "目的地(もくてきち)", emoji: "📍", level: "Intermediate", category: "Travel" },
-      { en: "Discovery", sw: "发现 fāxiàn", ja: "発見(はっけん)", emoji: "🔎", level: "Intermediate", category: "Science" },
-      { en: "Energy", sw: "能源 néngyuán", ja: "エネルギー", emoji: "⚡", level: "Intermediate", category: "Science" },
-      { en: "Climate", sw: "气候 qìhòu", ja: "気候(きこう)", emoji: "🌡️", level: "Intermediate", category: "Nature" },
-      { en: "Ocean", sw: "海洋 hǎiyáng", ja: "海洋(かいよう)", emoji: "🌊", level: "Intermediate", category: "Nature" },
-      
-      { en: "Forest", sw: "森林 sēnlín", ja: "森(もり)", emoji: "🌲", level: "Intermediate", category: "Nature" },
-      { en: "Agriculture", sw: "农业 nóngyè", ja: "農業(のうぎょう)", emoji: "🚜", level: "Intermediate", category: "Life" },
-      { en: "Industry", sw: "工业 gōngyè", ja: "産業(さんぎょう)", emoji: "🏭", level: "Intermediate", category: "Society" },
-      { en: "Trade", sw: "贸易 màoyì", ja: "貿易(ぼうえき)", emoji: "🚢", level: "Intermediate", category: "Economy" },
-      { en: "Communication", sw: "通信 tōngxìn", ja: "通信(つうしん)", emoji: "📡", level: "Intermediate", category: "Tech" },
-      
-      { en: "Internet", sw: "互联网 hùliánwǎng", ja: "インターネット", emoji: "🌐", level: "Intermediate", category: "Tech" },
-      { en: "Software", sw: "软件 ruǎnjiàn", ja: "ソフトウェア", emoji: "💿", level: "Intermediate", category: "Tech" },
-      { en: "Electric", sw: "电的 diàn de", ja: "電気の(でんきの)", emoji: "💡", level: "Intermediate", category: "Tech" },
-      { en: "Modern", sw: "现代 xiàndài", ja: "現代的な(げんだいてきな)", emoji: "🏙️", level: "Intermediate", category: "Time" },
-      { en: "Traditional", sw: "传统的 chuántǒng de", ja: "伝統的な(でんとうてきな)", emoji: "🎍", level: "Intermediate", category: "Society" },
-      
-      { en: "Citizen", sw: "公民 gōngmín", ja: "国民(こくみん)", emoji: "👥", level: "Intermediate", category: "Society" },
-      { en: "Leader", sw: "领导 lǐngdǎo", ja: "指導者(しどうしゃ)", emoji: "👑", level: "Intermediate", category: "People" },
-      { en: "Peace", sw: "和平 hépíng", ja: "平和(へいわ)", emoji: "☮️", level: "Intermediate", category: "Abstract" },
-      { en: "Conflict", sw: "冲突 chōngtū", ja: "紛争(ふんそう)", emoji: "⚔️", level: "Intermediate", category: "Society" },
-      { en: "Solution", sw: "解决方案 jiějué fāng'àn", ja: "解決策(かいけつさく)", emoji: "✅", level: "Intermediate", category: "Abstract" },
-      
-      { en: "Problem", sw: "问题 wèntí", ja: "問題(もんだい)", emoji: "❓", level: "Intermediate", category: "Abstract" },
-      { en: "Knowledge", sw: "知识 zhīshi", ja: "知識(ちしき)", emoji: "📖", level: "Intermediate", category: "Academic" },
-      { en: "Skill", sw: "技能 jìnéng", ja: "技能(ぎのう)", emoji: "🛠️", level: "Intermediate", category: "Academic" },
-      { en: "Confidence", sw: "自信 zìxìn", ja: "自信(じしん)", emoji: "💪", level: "Intermediate", category: "Abstract" },
-      { en: "Creativity", sw: "创造力 chuàngzàolì", ja: "創造性(そうぞうせい)", emoji: "🎨", level: "Intermediate", category: "Abstract" },
-      
-      { en: "Strategy", sw: "战略 zhànlüè", ja: "戦略(せんりゃく)", emoji: "🎯", level: "Intermediate", category: "Business" },
-      { en: "Investment", sw: "投资 tóuzī", ja: "投資(とうし)", emoji: "📈", level: "Intermediate", category: "Economy" },
-      { en: "Production", sw: "生产 shēngchǎn", ja: "生産(せいさん)", emoji: "🏭", level: "Intermediate", category: "Industry" },
-      { en: "Quality", sw: "质量 zhìliàng", ja: "品質(ひんしつ)", emoji: "⭐", level: "Intermediate", category: "Business" },
-      { en: "Quantity", sw: "数量 shùliàng", ja: "量(りょう)", emoji: "🔢", level: "Intermediate", category: "Business" },
-      
-      { en: "Resource", sw: "资源 zīyuán", ja: "資源(しげん)", emoji: "💎", level: "Intermediate", category: "Nature" },
-      { en: "Environment", sw: "环境 huánjìng", ja: "環境(かんきょう)", emoji: "🍃", level: "Intermediate", category: "Nature" },
-      { en: "Conservation", sw: "保护 bǎohù", ja: "保護(ほご)", emoji: "🛡️", level: "Intermediate", category: "Nature" },
-      { en: "Pollution", sw: "污染 wūrǎn", ja: "汚染(おせん)", emoji: "💨", level: "Intermediate", category: "Nature" },
-      { en: "Atmosphere", sw: "大气 dàqì", ja: "大気(たいき)", emoji: "☁️", level: "Intermediate", category: "Nature" },
-      
-      { en: "Space", sw: "宇宙 yǔzhòu", ja: "宇宙(うちゅう)", emoji: "🚀", level: "Intermediate", category: "Science" },
-      { en: "Planet", sw: "行星 xíngxīng", ja: "惑星(わくせい)", emoji: "🪐", level: "Intermediate", category: "Science" },
-      { en: "Research", sw: "研究 yánjiū", ja: "研究(けんきゅう)", emoji: "🧪", level: "Intermediate", category: "Academic" },
-      { en: "Analysis", sw: "分析 fēnxī", ja: "分析(ぶんせき)", emoji: "📊", level: "Intermediate", category: "Academic" },
-      { en: "Evidence", sw: "证据 zhèngjù", ja: "証拠(しょうこ)", emoji: "🕵️", level: "Intermediate", category: "Science" },
-      
-      { en: "Logic", sw: "逻辑 luójí", ja: "論理(ろんり)", emoji: "🧠", level: "Intermediate", category: "Academic" },
-      { en: "Definition", sw: "定义 dìngyì", ja: "定義(ていぎ)", emoji: "📖", level: "Intermediate", category: "Academic" },
-      { en: "Purpose", sw: "目的 mùdì", ja: "目的(もくてき)", emoji: "🚩", level: "Intermediate", category: "Abstract" },
-      { en: "Benefit", sw: "利益 lìyì", ja: "利益(りえき)", emoji: "🎁", level: "Intermediate", category: "Abstract" },
-      { en: "Disadvantage", sw: "缺点 quēdiǎn", ja: "欠点(けってん)", emoji: "⚠️", level: "Intermediate", category: "Abstract" },
-      
-      { en: "Failure", sw: "失败 shībài", ja: "失敗(しっぱい)", emoji: "❌", level: "Intermediate", category: "Abstract" },
-      { en: "Improvement", sw: "改善 gǎishàn", ja: "改善(かいぜん)", emoji: "🆙", level: "Intermediate", category: "Abstract" },
-      { en: "Development", sw: "发展 fāzhǎn", ja: "開発(かいはつ)", emoji: "🏗️", level: "Intermediate", category: "Industry" },
-      { en: "Construction", sw: "建设 jiànshè", ja: "建設(けんせつ)", emoji: "🚜", level: "Intermediate", category: "Industry" },
-      { en: "Transport", sw: "运输 yùnshū", ja: "輸送(ゆそう)", emoji: "🚚", level: "Intermediate", category: "Town" },
-      
-      { en: "Safety", sw: "安全 ānquán", ja: "安全(あんぜん)", emoji: "⛑️", level: "Intermediate", category: "Life" },
-      { en: "Disease", sw: "疾病 jíbìng", ja: "病気(びょうき)", emoji: "🤒", level: "Intermediate", category: "Life" },
-      { en: "Prevention", sw: "预防 yùfáng", ja: "予防(よぼう)", emoji: "🛡️", level: "Intermediate", category: "Life" },
-      { en: "Language", sw: "语言 yǔyán", ja: "言語(げんご)", emoji: "🗣️", level: "Intermediate", category: "Society" },
-      { en: "Literature", sw: "文学 wénxué", ja: "文学(ぶんがく)", emoji: "📚", level: "Intermediate", category: "Society" },
-      
-      { en: "Religion", sw: "宗教 zōngjiào", ja: "宗教(しゅうきょう)", emoji: "🕍", level: "Intermediate", category: "Society" },
-      { en: "Politics", sw: "政治 zhèngzhì", ja: "政治(せいじ)", emoji: "🗳️", level: "Intermediate", category: "Society" },
-      { en: "Economy", sw: "经济 jīngjì", ja: "経済(けいざい)", emoji: "💹", level: "Intermediate", category: "Society" },
-      { en: "Responsibility", sw: "责任 zérèn", ja: "責任(せきにん)", emoji: "🤝", level: "Intermediate", category: "Abstract" },
-      { en: "Community", sw: "社区 shèqū", ja: "地域社会(ちいきしゃかい)", emoji: "🏘️", level: "Intermediate", category: "Society" },
-      
-        /* 上級 */
-        { en:"Philosophy",     sw:"哲学 zhéxué",   ja:"哲学(てつがく)", emoji:"🧐", level:"Advanced", category:"Academic"},
-        { en:"Architecture",  sw:"建筑 jiànzhù",  ja:"建築(けんちく)", emoji:"🏛️", level:"Advanced", category:"Art"},
-        { en:"Constitution",  sw:"宪法 xiànfǎ",   ja:"憲法(けんぽう)", emoji:"📜", level:"Advanced", category:"Law"},
-        { en:"Innovation",    sw:"创新 chuàngxīn",ja:"革新(かくしん)", emoji:"🚀", level:"Advanced", category:"Tech"},
-        { en:"Sustainability",sw:"可持续性 kě chíxù xìng", ja:"持続可能性(じぞくかのうせい)", emoji:"♻️", level:"Advanced", category:"Environment"},
-        { en: "Democracy", sw: "民主主义 mínzhǔ zhǔyì", ja: "民主主義(みんしゅしゅぎ)", emoji: "🗳️", level: "Advanced", category: "Society" },
-      { en: "Artificial Intelligence", sw: "人工智能 réngōng zhìnéng", ja: "人工知能(じんこうちのう)", emoji: "🤖", level: "Advanced", category: "Tech" },
-      { en: "Global Warming", sw: "全球变暖 quánqiú biànnuǎn", ja: "地球温暖化(ちきゅうおんだんか)", emoji: "🌡️", level: "Advanced", category: "Environment" },
-      { en: "Diversity", sw: "多样性 duōyàngxìng", ja: "多様性(たようせい)", emoji: "🌈", level: "Advanced", category: "Society" },
-      { en: "Psychology", sw: "心理学 xīnlǐxué", ja: "心理学(しんりがく)", emoji: "🧠", level: "Advanced", category: "Academic" },
-      { en: "Ethics", sw: "伦理 lúnlǐ", ja: "倫理(りんり)", emoji: "⚖️", level: "Advanced", category: "Philosophy" },
-      { en: "Hypothesis", sw: "假设 jiǎshè", ja: "仮説(かせつ)", emoji: "🧪", level: "Advanced", category: "Science" },
-      { en: "Quantum", sw: "量子 liàngzǐ", ja: "量子(りょうし)", emoji: "⚛️", level: "Advanced", category: "Science" },
-      { en: "Evolution", sw: "进化 jìnhuà", ja: "進化(しんか)", emoji: "🐒", level: "Advanced", category: "Science" },
-      { en: "Infrastructure", sw: "基础设施 jīchǔ shèshī", ja: "社会基盤(いんふら)", emoji: "🏗️", level: "Advanced", category: "Town" },
-      
-      { en: "Negotiation", sw: "谈判 tánpàn", ja: "交渉(こうしょう)", emoji: "🤝", level: "Advanced", category: "Business" },
-      { en: "Investment", sw: "投资 tóuzī", ja: "投資(とうし)", emoji: "💰", level: "Advanced", category: "Economy" },
-      { en: "Bureaucracy", sw: "官僚体制 guānliáo tǐzhì", ja: "官僚制度(かんりょうせいど)", emoji: "🏢", level: "Advanced", category: "Society" },
-      { en: "Human Rights", sw: "人权 rénquán", ja: "人権(じんけん)", emoji: "🕊️", level: "Advanced", category: "Law" },
-      { en: "Sovereignty", sw: "主权 zhǔquán", ja: "主権(しゅけん)", emoji: "👑", level: "Advanced", category: "Law" },
-      
-      { en: "Paradox", sw: "悖论 bèilùn", ja: "逆説(ぱらどっくす)", emoji: "🌀", level: "Advanced", category: "Philosophy" },
-      { en: "Intuition", sw: "直觉 zhíjué", ja: "直感(ちょっかん)", emoji: "⚡", level: "Advanced", category: "Abstract" },
-      { en: "Consciousness", sw: "意识 yìshí", ja: "意識(いしき)", emoji: "👁️", level: "Advanced", category: "Abstract" },
-      { en: "Aesthetics", sw: "美学 měixué", ja: "美学(びがく)", emoji: "🖼️", level: "Advanced", category: "Art" },
-      { en: "Renaissance", sw: "文艺复兴 wényì fùxīng", ja: "ルネサンス", emoji: "🎨", level: "Advanced", category: "History" },
-      
-      { en: "Diplomacy", sw: "外交 wàijiāo", ja: "外交(がいこう)", emoji: "🌍", level: "Advanced", category: "Society" },
-      { en: "Sanction", sw: "制裁 zhìcái", ja: "制裁(せいさい)", emoji: "🚫", level: "Advanced", category: "Society" },
-      { en: "Refugee", sw: "难民 nànmín", ja: "難民(なんみん)", emoji: "🏃", level: "Advanced", category: "Society" },
-      { en: "Migration", sw: "移民 yímín", ja: "移住(いじゅう)", emoji: "✈️", level: "Advanced", category: "Society" },
-      { en: "Pandemic", sw: "全球大流行 quánqiú dà liúxíng", ja: "世界的流行(ぱんでみっく)", emoji: "😷", level: "Advanced", category: "Health" },
-      
-      { en: "Vaccine", sw: "疫苗 yìmiáo", ja: "ワクチン", emoji: "💉", level: "Advanced", category: "Health" },
-      { en: "Gene", sw: "基因 jīyīn", ja: "遺伝子(いでんし)", emoji: "🧬", level: "Advanced", category: "Science" },
-      { en: "Galaxy", sw: "银河 xīnghé", ja: "銀河(ぎんが)", emoji: "🌌", level: "Advanced", category: "Science" },
-      { en: "Gravity", sw: "重力 zhònglì", ja: "重力(じゅうりょく)", emoji: "🍎", level: "Advanced", category: "Science" },
-      { en: "Robot", sw: "机器人 jīqìrén", ja: "ロボット", emoji: "🤖", level: "Advanced", category: "Tech" },
-      
-      { en: "Crypto", sw: "加密 jiāmì", ja: "暗号(あんごう)", emoji: "🔐", level: "Advanced", category: "Tech" },
-      { en: "Privacy", sw: "隐私 yǐnsī", ja: "個人情報(ぷらいばしー)", emoji: "🛡️", level: "Advanced", category: "Tech" },
-      { en: "Copyright", sw: "版权 bǎnquán", ja: "著作権(ちょさくけん)", emoji: "©️", level: "Advanced", category: "Law" },
-      { en: "Contract", sw: "合同 hétóng", ja: "契約(けいやく)", emoji: "📝", level: "Advanced", category: "Law" },
-      { en: "Witness", sw: "证人 zhèngrén", ja: "証人(しょうにん)", emoji: "🗣️", level: "Advanced", category: "Law" },
-      
-      { en: "Inheritance", sw: "继承 jìchéng", ja: "相続(そうぞく)", emoji: "🎁", level: "Advanced", category: "Law" },
-      { en: "Metaphor", sw: "隐喻 yǐnyù", ja: "隠喩(めたふぁー)", emoji: "📖", level: "Advanced", category: "Academic" },
-      { en: "Syntax", sw: "句法 jùfǎ", ja: "構文(こうぶん)", emoji: "💻", level: "Advanced", category: "Academic" },
-      { en: "Algorithm", sw: "算法 suànfǎ", ja: "アルゴリズム", emoji: "🔢", level: "Advanced", category: "Tech" },
-      { en: "Strategy", sw: "战略 zhànlüè", ja: "戦略(せんりゃく)", emoji: "🎯", level: "Advanced", category: "Business" },
-      
-      { en: "Profit", sw: "利润 lìrùn", ja: "利益(りえき)", emoji: "📈", level: "Advanced", category: "Economy" },
-      { en: "Debt", sw: "债务 zhàiwù", ja: "負債(ふさい)", emoji: "📉", level: "Advanced", category: "Economy" },
-      { en: "Inflation", sw: "通货膨胀 tōnghuò péngzhàng", ja: "インフレ", emoji: "🎈", level: "Advanced", category: "Economy" },
-      { en: "Entrepreneur", sw: "企业家 qǐyèjiā", ja: "起業家(きぎょうか)", emoji: "💼", level: "Advanced", category: "Business" },
-      { en: "Sustainability", sw: "可持续性 kě chíxù xìng", ja: "持続可能性", emoji: "🌱", level: "Advanced", category: "Environment" },
-      
-      { en: "Atmosphere", sw: "大气 dàqì", ja: "大気(たいき)", emoji: "☁️", level: "Advanced", category: "Science" },
-      { en: "Exploration", sw: "探索 tànsuǒ", ja: "探検(たんけん)", emoji: "🧭", level: "Advanced", category: "Travel" },
-      { en: "Satellite", sw: "卫星 wèixīng", ja: "人工衛星(じんこうえいせい)", emoji: "🛰️", level: "Advanced", category: "Tech" },
-      { en: "Microscope", sw: "显微镜 xiǎnwēijìng", ja: "顕微鏡(けんびきょう)", emoji: "🔬", level: "Advanced", category: "Science" },
-      { en: "Telescope", sw: "望远镜 wàngyuǎnjìng", ja: "望遠鏡(ぼうえんきょう)", emoji: "🔭", level: "Advanced", category: "Science" },
-      
-      { en: "Genetics", sw: "遗传学 yíchuánxué", ja: "遺伝学(いでんがく)", emoji: "🧬", level: "Advanced", category: "Science" },
-      { en: "Organism", sw: "有机体 yǒujītǐ", ja: "有機体(ゆうきたい)", emoji: "🦠", level: "Advanced", category: "Science" },
-      { en: "Inclusion", sw: "包容 bāoróng", ja: "包括(ほうかつ)", emoji: "🤝", level: "Advanced", category: "Society" },
-      { en: "Regulation", sw: "法规 fǎguī", ja: "規制(きせい)", emoji: "📝", level: "Advanced", category: "Law" },
-      { en: "Resolution", sw: "解决 jiějué", ja: "解決(かいけつ)", emoji: "💡", level: "Advanced", category: "Abstract" },
-      
-      { en: "Perspective", sw: "视角 shìjiǎo", ja: "観点(かんてん)", emoji: "👓", level: "Advanced", category: "Abstract" },
-      { en: "Philosophy", sw: "哲学 zhéxué", ja: "哲学(てつがく)", emoji: "📜", level: "Advanced", category: "Academic" },
-      { en: "Abstract", sw: "抽象的 chōuxiàng de", ja: "抽象的(ちゅうしょうてき)", emoji: "🎨", level: "Advanced", category: "Abstract" },
-      { en: "Concept", sw: "概念 gàiniàn", ja: "概念(がいねん)", emoji: "💡", level: "Advanced", category: "Abstract" },
-      { en: "Efficiency", sw: "效率 xiàolǜ", ja: "効率(こうりつ)", emoji: "⚡", level: "Advanced", category: "Business" },
-      
-      { en: "Framework", sw: "框架 kuāngjià", ja: "枠組み(わくぐみ)", emoji: "🏗️", level: "Advanced", category: "Academic" },
-      { en: "Implementation", sw: "实施 shíshī", ja: "実行(じっこう)", emoji: "⚙️", level: "Advanced", category: "Business" },
-      { en: "Indicator", sw: "指标 zhǐbiāo", ja: "指標(しひょう)", emoji: "📈", level: "Advanced", category: "Business" },
-      { en: "Maintenance", sw: "维护 wéihù", ja: "保守(ほしゅ)", emoji: "🛠️", level: "Advanced", category: "Tech" },
-      { en: "Objective", sw: "目标 mùbiāo", ja: "目標(もくひょう)", emoji: "🎯", level: "Advanced", category: "Abstract" },
-      
-      { en: "Participation", sw: "参与 cānyù", ja: "参加(さんか)", emoji: "🙋", level: "Advanced", category: "Society" },
-      { en: "Procedure", sw: "程序 chéngxù", ja: "手順(てじゅん)", emoji: "📋", level: "Advanced", category: "Abstract" },
-      { en: "Recognition", sw: "认知 rènzhī", ja: "認識(にんしき)", emoji: "🧠", level: "Advanced", category: "Abstract" },
-      { en: "Reliability", sw: "可靠性 kěkàoxìng", ja: "信頼性(しんらいせい)", emoji: "🤝", level: "Advanced", category: "Abstract" },
-      { en: "Standard", sw: "标准 biāozhǔn", ja: "標準(ひょうじゅん)", emoji: "📏", level: "Advanced", category: "Abstract" },
-      
-      { en: "Transformation", sw: "转型 zhuǎnxíng", ja: "変革(へんかく)", emoji: "🦋", level: "Advanced", category: "Abstract" },
-      { en: "Transparency", sw: "透明度 tòumíngdù", ja: "透明性(とうめいせい)", emoji: "💎", level: "Advanced", category: "Society" },
-      { en: "Urbanization", sw: "城市化 chéngshìhuà", ja: "都市化(としか)", emoji: "🏙️", level: "Advanced", category: "Society" },
-      { en: "Validation", sw: "验证 yànzhèng", ja: "検証(けんしょう)", emoji: "✅", level: "Advanced", category: "Academic" },
-      { en: "Vulnerability", sw: "脆弱性 cuìruòxìng", ja: "脆弱性(ぜいじゃくせい)", emoji: "🐚", level: "Advanced", category: "Abstract" },
-      
-      { en: "Welfare", sw: "福利 fúlì", ja: "福祉(ふくし)", emoji: "🏥", level: "Advanced", category: "Society" },
-      { en: "Architecture", sw: "建筑学 jiànzhúxué", ja: "建築(けんちく)", emoji: "🏛️", level: "Advanced", category: "Art" },
-      { en: "Colleague", sw: "同事 tóngshì", ja: "同僚(どうりょう)", emoji: "💼", level: "Advanced", category: "People" },
-      { en: "Contribution", sw: "贡献 gòngxiàn", ja: "貢献(こうけん)", emoji: "🤲", level: "Advanced", category: "Society" },
-      { en: "Description", sw: "描述 miáoshù", ja: "記述(きじゅつ)", emoji: "📝", level: "Advanced", category: "Abstract" },
-      
-      { en: "Evaluation", sw: "评估 pínggū", ja: "評価(ひょうか)", emoji: "📋", level: "Advanced", category: "Academic" },
-      { en: "Generation", sw: "世代 shìdài", ja: "世代(せだい)", emoji: "👪", level: "Advanced", category: "People" },
-      { en: "Heritage", sw: "遗产 yíchǎn", ja: "遺産(いさん)", emoji: "🏰", level: "Advanced", category: "Society" },
-      { en: "Motivation", sw: "动机 dòngjī", ja: "動機付け(もちべーしょん)", emoji: "🔥", level: "Advanced", category: "Abstract" },
-      { en: "Significant", sw: "重要的 zhòngyào de", ja: "重要な(じゅうような)", emoji: "⚠️", level: "Advanced", category: "Abstract" },
-      { en: "Substantial", sw: "实质性的 shízhìxìng de", ja: "実質的な(じっしつてきな)", emoji: "📦", level: "Advanced", category: "Abstract" },
-      ];
-      
-      /* ================= 文法データ：初級（修正版） ================= */
-      const grammarData = [
-        { title:"基本の挨拶", sw_phrase:"你好 nǐ hǎo", en_phrase:"How are you?", ja_trans:"こんにちは。", ja_explanation:"最も基本的で一般的な中国語の挨拶です。", level:"Beginner"},
-        { title:"元気な返事", sw_phrase:"我很好，谢谢！ wǒ hěn hǎo, xièxie!", en_phrase:"Very good, thank you!", ja_trans:"とても元気です、ありがとう。", ja_explanation:"挨拶に対する定番の返答表現です。", level:"Beginner"},
-        { title:"自己紹介", sw_phrase:"我叫Yuki。 wǒ jiào Yuki.", en_phrase:"My name is Yuki.", ja_trans:"私の名前はユキです。", ja_explanation:"「我叫＋名前」で自己紹介を表します。", level:"Beginner"},
-        { title:"出身", sw_phrase:"我来自日本。 wǒ láizì Rìběn.", en_phrase:"I am from Japan.", ja_trans:"日本から来ました。", ja_explanation:"「来自」は出身地を表します。", level:"Beginner"},
-        { title:"感謝（食事）", sw_phrase:"谢谢这顿饭！ xièxie zhè dùn fàn!", en_phrase:"Thank you for the food!", ja_trans:"ごちそうさまでした。", ja_explanation:"食事に対する感謝を表す言い方です。", level:"Beginner"},
-      
-        { title:"丁寧なお願い", sw_phrase:"请给我水。 qǐng gěi wǒ shuǐ.", en_phrase:"Give me water, please.", ja_trans:"お水をください。", ja_explanation:"「请」は丁寧な依頼を表す語です。", level:"Beginner"},
-        { title:"現在の動作（質問）", sw_phrase:"你现在在做什么？ nǐ xiànzài zài zuò shénme?", en_phrase:"What are you doing now?", ja_trans:"今、何をしていますか？", ja_explanation:"「在＋動詞」で進行中の動作を表します。", level:"Beginner"},
-        { title:"現在進行形", sw_phrase:"我在学习中文。 wǒ zài xuéxí zhōngwén.", en_phrase:"I am studying Chinese.", ja_trans:"私は中国語を勉強しています。", ja_explanation:"動作の進行を示す基本構文です。", level:"Beginner"},
-        { title:"過去の出来事", sw_phrase:"我昨天吃了水果。 wǒ zuótiān chī le shuǐguǒ.", en_phrase:"I ate fruit yesterday.", ja_trans:"昨日、果物を食べました。", ja_explanation:"「了」は動作の完了を示します。", level:"Beginner"},
-        { title:"未来の予定", sw_phrase:"我明天要去旅行。 wǒ míngtiān yào qù lǚxíng.", en_phrase:"I will travel tomorrow.", ja_trans:"明日、旅行に行きます。", ja_explanation:"「要」は近い未来の予定を表します。", level:"Beginner"},
-      
-        { title:"否定の表現", sw_phrase:"我不懂英语。 wǒ bù dǒng yīngyǔ.", en_phrase:"I don't understand English.", ja_trans:"英語がわかりません。", ja_explanation:"「不」は動詞や形容詞の否定に使います。", level:"Beginner"},
-        { title:"場所を尋ねる", sw_phrase:"市场在哪里？ shìchǎng zài nǎlǐ?", en_phrase:"Where is the market?", ja_trans:"市場はどこですか？", ja_explanation:"「在哪里」で場所を尋ねます。", level:"Beginner"},
-        { title:"値段を尋ねる", sw_phrase:"多少钱？ duōshǎo qián?", en_phrase:"How much is it?", ja_trans:"いくらですか？", ja_explanation:"買い物で非常によく使う表現です。", level:"Beginner"},
-        { title:"所有の表現", sw_phrase:"我有一个哥哥。 wǒ yǒu yí gè gēge.", en_phrase:"I have an older brother.", ja_trans:"私には兄が一人います。", ja_explanation:"「有」は所有や存在を表します。", level:"Beginner"},
-        { title:"許可を求める", sw_phrase:"我可以进去吗？ wǒ kěyǐ jìnqù ma?", en_phrase:"May I come in?", ja_trans:"入ってもいいですか？", ja_explanation:"「可以吗」で許可を尋ねます。", level:"Beginner"},
-      
-        { title:"希望を伝える", sw_phrase:"我想买这个。 wǒ xiǎng mǎi zhège.", en_phrase:"I want to buy this.", ja_trans:"これを買いたいです。", ja_explanation:"「想」は希望や意志を表します。", level:"Beginner"},
-        { title:"謝罪", sw_phrase:"对不起，我迟到了。 duìbuqǐ, wǒ chídào le.", en_phrase:"Sorry I'm late.", ja_trans:"遅れてすみません。", ja_explanation:"「对不起」は代表的な謝罪表現です。", level:"Beginner"},
-        { title:"理解の確認", sw_phrase:"你明白了吗？ nǐ míngbái le ma?", en_phrase:"Do you understand?", ja_trans:"わかりましたか？", ja_explanation:"「了吗？」で完了や理解を確認します。", level:"Beginner"},
-        { title:"肯定の返事", sw_phrase:"是的，我明白了。 shì de, wǒ míngbái le.", en_phrase:"Yes, I understand.", ja_trans:"はい、わかりました。", ja_explanation:"「是的」は肯定の返答です。", level:"Beginner"},
-        { title:"時間の表現", sw_phrase:"现在是九点。 xiànzài shì jiǔ diǎn.", en_phrase:"It is nine o'clock now.", ja_trans:"今は9時です。", ja_explanation:"「是」で時間を表します。", level:"Beginner"},
-      
-        { title:"疲労を伝える", sw_phrase:"我很累。 wǒ hěn lèi.", en_phrase:"I am very tired.", ja_trans:"とても疲れています。", ja_explanation:"「很＋形容詞」は自然な表現です。", level:"Beginner"},
-        { title:"別れの挨拶", sw_phrase:"待会儿见！ dài huìr jiàn!", en_phrase:"See you later!", ja_trans:"また後で！", ja_explanation:"短時間後の再会を示します。", level:"Beginner"},
-        { title:"天気", sw_phrase:"今天是晴天。 jīntiān shì qíngtiān.", en_phrase:"Today is sunny.", ja_trans:"今日は晴れです。", ja_explanation:"「是＋名詞」で状態を表します。", level:"Beginner"},
-        { title:"方向（右）", sw_phrase:"向右转。 xiàng yòu zhuǎn.", en_phrase:"Turn right.", ja_trans:"右に曲がってください。", ja_explanation:"道案内の基本表現です。", level:"Beginner"},
-        { title:"同意", sw_phrase:"我也是！ wǒ yě shì!", en_phrase:"Me too!", ja_trans:"私もです！", ja_explanation:"「也」は「〜も」を表します。", level:"Beginner"},
-      
-        { title:"注文", sw_phrase:"请给我咖啡。 qǐng gěi wǒ kāfēi.", en_phrase:"Coffee, please.", ja_trans:"コーヒーをください。", ja_explanation:"飲食店での基本表現です。", level:"Beginner"},
-        { title:"手伝いの申し出", sw_phrase:"我可以帮你吗？ wǒ kěyǐ bāng nǐ ma?", en_phrase:"Can I help you?", ja_trans:"お手伝いしましょうか？", ja_explanation:"「帮」は助けるという意味です。", level:"Beginner"},
-        { title:"名前を聞く", sw_phrase:"你叫什么名字？ nǐ jiào shénme míngzi?", en_phrase:"What is your name?", ja_trans:"お名前は何ですか？", ja_explanation:"名前を尋ねる定型文です。", level:"Beginner"},
-        { title:"年齢", sw_phrase:"我二十岁。 wǒ èrshí suì.", en_phrase:"I am twenty.", ja_trans:"私は20歳です。", ja_explanation:"年齢には「岁」を使います。", level:"Beginner"},
-        { title:"好きな物", sw_phrase:"我喜欢这个。 wǒ xǐhuān zhège.", en_phrase:"I like this.", ja_trans:"これが好きです。", ja_explanation:"「喜欢」は好みを表します。", level:"Beginner"},
-      
-        { title:"嫌い", sw_phrase:"我不喜欢牛奶。 wǒ bù xǐhuān niúnǎi.", en_phrase:"I don't like milk.", ja_trans:"牛乳が好きではありません。", ja_explanation:"「不」で好みを否定します。", level:"Beginner"},
-        { title:"友人紹介", sw_phrase:"这是我的朋友。 zhè shì wǒ de péngyou.", en_phrase:"This is my friend.", ja_trans:"こちらは私の友人です。", ja_explanation:"「这是〜」は紹介表現です。", level:"Beginner"},
-        { title:"居住地", sw_phrase:"我住在东京。 wǒ zhù zài Dōngjīng.", en_phrase:"I live in Tokyo.", ja_trans:"東京に住んでいます。", ja_explanation:"「住在」で居住地を表します。", level:"Beginner"},
-        { title:"職業", sw_phrase:"我是老师。 wǒ shì lǎoshī.", en_phrase:"I am a teacher.", ja_trans:"私は教師です。", ja_explanation:"「我是＋職業」で表します。", level:"Beginner"},
-        { title:"行き先", sw_phrase:"你要去哪里？ nǐ yào qù nǎlǐ?", en_phrase:"Where are you going?", ja_trans:"どこへ行きますか？", ja_explanation:"未来の行動を尋ねます。", level:"Beginner"},
-      
-        { title:"帰宅", sw_phrase:"我要回家。 wǒ yào huí jiā.", en_phrase:"I am going home.", ja_trans:"家に帰ります。", ja_explanation:"「回家」は帰宅を意味します。", level:"Beginner"},
-        { title:"冷たい水", sw_phrase:"我想要冷水。 wǒ xiǎng yào lěng shuǐ.", en_phrase:"I want cold water.", ja_trans:"冷たい水が欲しいです。", ja_explanation:"形容詞は名詞の前に置きます。", level:"Beginner"},
-        { title:"熱い飲み物", sw_phrase:"热茶。 rè chá.", en_phrase:"Hot tea.", ja_trans:"熱いお茶。", ja_explanation:"簡潔な名詞句表現です。", level:"Beginner"},
-        { title:"トイレの場所", sw_phrase:"厕所在哪里？ cèsuǒ zài nǎlǐ?", en_phrase:"Where is the restroom?", ja_trans:"トイレはどこですか？", ja_explanation:"旅行で重要な表現です。", level:"Beginner"},
-        { title:"在庫確認", sw_phrase:"有水果吗？ yǒu shuǐguǒ ma?", en_phrase:"Is there fruit?", ja_trans:"果物はありますか？", ja_explanation:"「有吗？」で有無を尋ねます。", level:"Beginner"},
-      
-      /* ================= 文法データ：中級（修正版） ================= */
-        { title:"理由", sw_phrase:"因为我有工作，所以不能去。 yīnwèi wǒ yǒu gōngzuò, suǒyǐ bùnéng qù.", en_phrase:"Because I have work, I can't go.", ja_trans:"仕事があるので行けません。", ja_explanation:"「因为…所以…」は原因と結果を表す基本構文です。", level:"Intermediate"},
-        { title:"条件", sw_phrase:"如果你想，我可以帮你。 rúguǒ nǐ xiǎng, wǒ kěyǐ bāng nǐ.", en_phrase:"If you want, I can help you.", ja_trans:"もし望むなら手伝います。", ja_explanation:"「如果」は仮定条件を示します。", level:"Intermediate"},
-        { title:"逆説", sw_phrase:"我知道，但是我忘了。 wǒ zhīdào, dànshì wǒ wàng le.", en_phrase:"I know, but I forgot.", ja_trans:"知っていますが、忘れました。", ja_explanation:"「但是」は逆の内容をつなぐ接続詞です。", level:"Intermediate"},
-        { title:"選択", sw_phrase:"你要茶还是咖啡？ nǐ yào chá háishì kāfēi?", en_phrase:"Tea or coffee?", ja_trans:"お茶ですか、それともコーヒーですか？", ja_explanation:"「还是」は疑問文で選択を表します。", level:"Intermediate"},
-        { title:"過去の時間", sw_phrase:"当我还是孩子的时候…… dāng wǒ háishi háizi de shíhou...", en_phrase:"When I was a child...", ja_trans:"私が子供だった時…", ja_explanation:"「当…的时候」は時点を表します。", level:"Intermediate"},
-      
-        { title:"伝聞の表現", sw_phrase:"他说他会来。 tā shuō tā huì lái.", en_phrase:"He said that he would come.", ja_trans:"彼は来ると言いました。", ja_explanation:"動詞「说」の後に内容文を置きます。", level:"Intermediate"},
-        { title:"目的の表現", sw_phrase:"我学习是为了明白。 wǒ xuéxí shì wèile míngbái.", en_phrase:"I study in order to understand.", ja_trans:"理解するために勉強します。", ja_explanation:"「为了」は目的を明確に示します。", level:"Intermediate"},
-        { title:"比較", sw_phrase:"这个比那个好。 zhège bǐ nàge hǎo.", en_phrase:"This is better than that.", ja_trans:"これはあれより良いです。", ja_explanation:"「比」は比較対象を示します。", level:"Intermediate"},
-        { title:"最上級", sw_phrase:"我最喜欢这个。 wǒ zuì xǐhuān zhège.", en_phrase:"I like this the most.", ja_trans:"これが一番好きです。", ja_explanation:"「最」は最上級を表します。", level:"Intermediate"},
-        { title:"勧誘", sw_phrase:"我们现在走吧！ wǒmen xiànzài zǒu ba!", en_phrase:"Let's go now!", ja_trans:"今行きましょう！", ja_explanation:"語尾の「吧」で柔らかく勧誘します。", level:"Intermediate"},
-      
-        { title:"禁止", sw_phrase:"别这样做！ bié zhèyàng zuò!", en_phrase:"Don't do this!", ja_trans:"そんなことしないで！", ja_explanation:"「别」は禁止を表す命令形です。", level:"Intermediate"},
-        { title:"継続（まだ）", sw_phrase:"他还在读书。 tā hái zài dúshū.", en_phrase:"He is still studying.", ja_trans:"彼はまだ勉強しています。", ja_explanation:"「还在」は動作の継続を示します。", level:"Intermediate"},
-        { title:"直前の完了", sw_phrase:"我刚吃完。 wǒ gāng chī wán.", en_phrase:"I have just eaten.", ja_trans:"たった今食べ終わりました。", ja_explanation:"「刚」は直前の出来事を表します。", level:"Intermediate"},
-        { title:"継続の命令", sw_phrase:"继续读吧。 jìxù dú ba.", en_phrase:"Keep reading.", ja_trans:"読み続けてください。", ja_explanation:"「继续」は動作の継続を指示します。", level:"Intermediate"},
-        { title:"代替", sw_phrase:"喝水，不要喝汽水。 hē shuǐ, búyào hē qìshuǐ.", en_phrase:"Drink water instead of soda.", ja_trans:"ソーダではなく水を飲みなさい。", ja_explanation:"否定命令で代替行動を示します。", level:"Intermediate"},
-      
-        { title:"〜の前に", sw_phrase:"吃饭前要洗手。 chīfàn qián yào xǐ shǒu.", en_phrase:"Wash your hands before eating.", ja_trans:"食事の前に手を洗いなさい。", ja_explanation:"「前」は時間的な前後関係を表します。", level:"Intermediate"},
-        { title:"〜の後に", sw_phrase:"下班后我回家。 xiàbān hòu wǒ huí jiā.", en_phrase:"After work, I go home.", ja_trans:"仕事の後、家に帰ります。", ja_explanation:"「后」は後の動作を示します。", level:"Intermediate"},
-        { title:"一緒に", sw_phrase:"和我一起来吧。 hé wǒ yìqǐ lái ba.", en_phrase:"Come with me.", ja_trans:"私と一緒に来てください。", ja_explanation:"「和…一起」は同行を表します。", level:"Intermediate"},
-        { title:"なしで", sw_phrase:"不加糖的茶。 bù jiā táng de chá.", en_phrase:"Tea without sugar.", ja_trans:"砂糖なしのお茶。", ja_explanation:"「不＋動詞」で否定修飾します。", level:"Intermediate"},
-        { title:"習慣", sw_phrase:"他每天都读书。 tā měitiān dōu dúshū.", en_phrase:"He reads every day.", ja_trans:"彼は毎日読書します。", ja_explanation:"「都」は頻度や習慣を強調します。", level:"Intermediate"},
-      
-        { title:"話題", sw_phrase:"我们在谈论旅行。 wǒmen zài tánlùn lǚxíng.", en_phrase:"We are talking about travel.", ja_trans:"私たちは旅行について話しています。", ja_explanation:"「谈论」は話題を示す動詞です。", level:"Intermediate"},
-        { title:"〜のために", sw_phrase:"这是给你的。 zhè shì gěi nǐ de.", en_phrase:"This is for you.", ja_trans:"これはあなたのためです。", ja_explanation:"「给」は対象を示します。", level:"Intermediate"},
-        { title:"人の修飾", sw_phrase:"正在读书的人。 zhèngzài dúshū de rén.", en_phrase:"The person who is reading.", ja_trans:"本を読んでいる人。", ja_explanation:"「的」で人を修飾します。", level:"Intermediate"},
-        { title:"物の修飾", sw_phrase:"我喜欢的东西。 wǒ xǐhuān de dōngxi.", en_phrase:"The thing that I like.", ja_trans:"私が好きな物。", ja_explanation:"動詞＋的＋名詞の形です。", level:"Intermediate"},
-        { title:"場所の修飾", sw_phrase:"我住的地方。 wǒ zhù de dìfang.", en_phrase:"The place where I live.", ja_trans:"私が住んでいる場所。", ja_explanation:"場所も「的」で修飾します。", level:"Intermediate"},
-      
-        { title:"推量", sw_phrase:"也许我明天会来。 yěxǔ wǒ míngtiān huì lái.", en_phrase:"Maybe I will come tomorrow.", ja_trans:"たぶん明日来ます。", ja_explanation:"「也许」は不確かな推測です。", level:"Intermediate"},
-        { title:"確信", sw_phrase:"当然！ dāngrán!", en_phrase:"Of course!", ja_trans:"もちろんです！", ja_explanation:"強い肯定や同意を表します。", level:"Intermediate"},
-        { title:"同一", sw_phrase:"这个和那个一样。 zhège hé nàge yíyàng.", en_phrase:"This is the same as that.", ja_trans:"これはあれと同じです。", ja_explanation:"「一样」は同一性を示します。", level:"Intermediate"},
-        { title:"相違", sw_phrase:"这完全不一样。 zhè wánquán bù yíyàng.", en_phrase:"This is completely different.", ja_trans:"これは全く違います。", ja_explanation:"副詞「完全」で強調します。", level:"Intermediate"},
-        { title:"義務", sw_phrase:"我现在必须走了。 wǒ xiànzài bìxū zǒu le.", en_phrase:"I must go now.", ja_trans:"今行かなければなりません。", ja_explanation:"「必须」は強い義務を表します。", level:"Intermediate"},
-      
-      /* ================= 文法データ：上級（修正版） ================= */
-        { title:"推測の表現", sw_phrase:"好像要下雨了。 hǎoxiàng yào xiàyǔ le.", en_phrase:"It seems it will rain.", ja_trans:"雨が降りそうです。", ja_explanation:"「好像」は話し手の推測を表します。", level:"Advanced"},
-        { title:"仮定と後悔", sw_phrase:"要是我早知道就好了。 yàoshi wǒ zǎo zhīdào jiù hǎo le.", en_phrase:"If I had known earlier...", ja_trans:"早く知っていればよかったのに。", ja_explanation:"「要是…就好」は後悔を含む仮定表現です。", level:"Advanced"},
-        { title:"気づきの表現", sw_phrase:"原来如此！ yuánlái rúcǐ!", en_phrase:"I see!", ja_trans:"なるほど！", ja_explanation:"新しい事実への気づきを示します。", level:"Advanced"},
-        { title:"ことわざ", sw_phrase:"慢工出细活。 màn gōng chū xì huó.", en_phrase:"Haste makes waste.", ja_trans:"急がば回れ。", ja_explanation:"中国語の代表的なことわざです。", level:"Advanced"},
-        { title:"教訓表現", sw_phrase:"耐心带来成功。 nàixīn dàilái chénggōng.", en_phrase:"Patience brings success.", ja_trans:"忍耐は成功をもたらす。", ja_explanation:"抽象的な教訓を表します。", level:"Advanced"},
-      
-        { title:"比喩の表現", sw_phrase:"他就像我的哥哥一样。 tā jiù xiàng wǒ de gēge yíyàng.", en_phrase:"He is like my brother.", ja_trans:"彼は私の兄のようです。", ja_explanation:"「像…一样」は比喩表現です。", level:"Advanced"},
-        { title:"可能性の表現", sw_phrase:"他今天可能会来。 tā jīntiān kěnéng huì lái.", en_phrase:"He may come today.", ja_trans:"彼は今日来るかもしれません。", ja_explanation:"「可能」は可能性を示します。", level:"Advanced"},
-        { title:"避けられない行動", sw_phrase:"我别无选择，只能去。 wǒ bié wú xuǎnzé, zhǐnéng qù.", en_phrase:"I have no choice but to go.", ja_trans:"行かざるを得ません。", ja_explanation:"「只能」は他に選択肢がないことを示します。", level:"Advanced"},
-        { title:"相互動作", sw_phrase:"他们彼此打扰。 tāmen bǐcǐ dǎrǎo.", en_phrase:"They bother each other.", ja_trans:"彼らはお互いに邪魔をしています。", ja_explanation:"「彼此」は相互関係を表します。", level:"Advanced"},
-        { title:"使役構文", sw_phrase:"老师让我学习。 lǎoshī ràng wǒ xuéxí.", en_phrase:"The teacher made me study.", ja_trans:"先生は私に勉強させました。", ja_explanation:"「让」は使役を表す動詞です。", level:"Advanced"},
-      
-        { title:"受動表現", sw_phrase:"饭已经做好了。 fàn yǐjīng zuò hǎo le.", en_phrase:"The food has been cooked.", ja_trans:"料理はすでに作られています。", ja_explanation:"結果状態を示す受動的表現です。", level:"Advanced"},
-        { title:"強調構文", sw_phrase:"我已经清楚地告诉他了！ wǒ yǐjīng qīngchu de gàosu tā le!", en_phrase:"I told him clearly!", ja_trans:"彼にはっきり伝えました！", ja_explanation:"副詞で動作の強調を行います。", level:"Advanced"},
-        { title:"ふりをする", sw_phrase:"他假装生病了。 tā jiǎzhuāng shēngbìng le.", en_phrase:"He pretended to be sick.", ja_trans:"彼は病気のふりをしました。", ja_explanation:"「假装」は意図的な演技を示します。", level:"Advanced"},
-        { title:"突発的出来事", sw_phrase:"突然，他摔倒了。 tūrán, tā shuāidǎo le.", en_phrase:"Suddenly, he fell.", ja_trans:"突然、彼は転びました。", ja_explanation:"「突然」は急な変化を表します。", level:"Advanced"},
-        { title:"条件限定", sw_phrase:"只要你幸福就好。 zhǐyào nǐ xìngfú jiù hǎo.", en_phrase:"As long as you are happy.", ja_trans:"幸せでさえあればいい。", ja_explanation:"「只要…就…」は条件限定構文です。", level:"Advanced"},
-      
-        { title:"分配の表現", sw_phrase:"每个人都有一本书。 měi gèrén dōu yǒu yì běn shū.", en_phrase:"Everyone has a book.", ja_trans:"それぞれが本を持っています。", ja_explanation:"「每…都…」は全体を表します。", level:"Advanced"},
-        { title:"ほぼ完了", sw_phrase:"工作差不多完成了。 gōngzuò chàbuduō wánchéng le.", en_phrase:"The work is almost finished.", ja_trans:"仕事はほぼ終わりました。", ja_explanation:"「差不多」は程度の近さを示します。", level:"Advanced"},
-        { title:"起点の表現", sw_phrase:"从去年以来…… cóng qùnián yǐlái...", en_phrase:"Since last year...", ja_trans:"昨年以来…", ja_explanation:"「从…以来」は時間の起点を表します。", level:"Advanced"},
-        { title:"強い否定", sw_phrase:"我绝不会那样做。 wǒ jué bú huì nàyàng zuò.", en_phrase:"I will never do that.", ja_trans:"決してそんなことはしません。", ja_explanation:"「绝不会」は非常に強い否定です。", level:"Advanced"},
-        { title:"長期の別れ", sw_phrase:"再见，期待再会！ zàijiàn, qídài zàihuì!", en_phrase:"Goodbye, until we meet again!", ja_trans:"さようなら、また会う日まで。", ja_explanation:"丁寧で前向きな別れの表現です。", level:"Advanced"},
-      ];
-      
-      /* ================= 音声（北京語・韓国語最適化版） ================= */
-      function speak(lang){
-        const el = document.getElementById('v-' + lang);
-        if(!el) return;
-        
-        let text = el.innerText;
-        
-        // 外国語（北京語・韓国語）または日本語の場合、不要な文字を掃除
-        if(lang === 'sw'){
-          // アルファベットとピンイン記号（āáなど）を削除
-          text = text.replace(/[a-zA-Zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜü\s]+/g, '');
-        } else if(lang === 'ja'){
-          // 日本語の括弧（読み仮名）を削除
-          text = text.replace(/\(.*\)/g, '');
-        }
-      
-        const u = new SpeechSynthesisUtterance(text);
-        
-        if(lang === 'en'){
-          u.lang = 'en-US';
-        } else if(lang === 'ja'){
-          u.lang = 'ja-JP'; 
-          u.rate = 0.95;
-        } else {
-          // 韓国語アプリ(Korea.html)の場合は 'ko-KR'、北京語なら 'zh-CN'
-          // ※提出されたコードが北京語用なので zh-CN にしていますが、韓国語用 index.html では ko-KR に書き換えてください
-          u.lang = (document.title.includes("韓国語")) ? 'ko-KR' : 'zh-CN';
-          u.rate = 0.9; 
-          u.pitch = 1.0;
-        }
-        
-        speechSynthesis.cancel();
-        speechSynthesis.speak(u);
-      }
-      
-      let speaking = false;
-      
-      function speakGrammar(id, lang){
-        if(speaking) return;
-        speaking = true;
-      
-        const el = document.getElementById(id);
-        if(!el){ speaking = false; return; }
-      
-        let text = el.innerText;
-      
-        // 文法学習でも同様に不要な文字を掃除
-        if(lang === 'zh' || lang === 'sw'){ 
-          text = text.replace(/[a-zA-Zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜü\s]+/g, '');
-        } else if(lang === 'ja'){
-          text = text.replace(/\(.*\)/g, '');
-        }
-      
-        const u = new SpeechSynthesisUtterance(text);
-      
-        if(lang === 'en') {
-          u.lang = 'en-US';
-        } else if(lang === 'ja') {
-          u.lang = 'ja-JP';
-        } else { 
-          u.lang = (document.title.includes("韓国語")) ? 'ko-KR' : 'zh-CN';
-          u.rate = 0.9; 
-          u.pitch = 1.0; 
-        }
-      
-        speechSynthesis.cancel();
-        speechSynthesis.speak(u);
-      
-        u.onend = () => {
-          speaking = false;
-        };
-      }
-      
-      let currentLevel = 'Beginner';
-      let vIndex = 0;
-      
-      
-      function setLevel(lvl) {
-        currentLevel = lvl;
-        document.querySelectorAll('.btn-lvl').forEach(b => b.classList.remove('active'));
-        const btn = document.getElementById('lvl-' + lvl);
-        if (btn) btn.classList.add('active');
-      }
-      
-      function showView(id) {
-        ['home','grammar-choice','vocabulary','grammar'].forEach(v=>{
-          const el=document.getElementById(v+'-view');
-          if(el) el.classList.add('hidden');
-        });
-        const target=document.getElementById(id+'-view');
-        if(target) target.classList.remove('hidden');
-      
-        if(id==='vocabulary'){
-          vIndex=0;
-          document.getElementById('v-lvl-badge').innerText=currentLevel;
-          updateWord();
-        }
-      
-        if(id==='grammar'){
-          document.getElementById('g-lvl-badge').innerText=currentLevel;
-          showGrammarList();
-        }
-      }
-      
-      function updateWord(){
-        const list=vocabularyData.filter(d=>d.level===currentLevel);
-        if(!list.length)return;
-        const d=list[vIndex];
-        document.getElementById('v-en').innerText=d.en;
-        document.getElementById('v-sw').innerText=d.sw;
-        document.getElementById('v-ja').innerText=d.ja;
-        document.getElementById('v-emoji').innerText=d.emoji;
-        document.getElementById('v-cat-badge').innerText=d.category;
-      }
-      
-      function changeWord(step){
-        const list=vocabularyData.filter(d=>d.level===currentLevel);
-        if(!list.length)return;
-        vIndex=(vIndex+step+list.length)%list.length;
-        updateWord();
-      }
-      
-      function showGrammarList(){
-        const area=document.getElementById('grammar-list');
-        area.innerHTML='';
-        grammarData
-          .filter(d=>d.level===currentLevel)
-          .forEach((item,i)=>{
-            const div=document.createElement('div');
-            div.className='card';
-            div.innerHTML=`
-              <div style="font-size:0.8rem;font-weight:bold;">${item.title}</div>
-      
-              <div class="lang-row">
-                <div class="lang-label">中文（北京语）</div>
-                <div class="lang-text">
-                  <span id="g-sw-${i}">${item.sw_phrase}</span>
-                  <button class="btn-speak" onclick="speakGrammar('g-sw-${i}','zh')">🔊</button>
-                </div>
-              </div>
-      
-              <div class="lang-row">
+
+<script>
+/* ============================================================
+   北京語学習データ：単語セクション (vocabularyData)
+   ① 重複削除・③ ID完全連番化・⑤ シャッフル再生最適化
+   ============================================================ */
+const vocabularyData = [
+  /* --- 初級 (Beginner) 001-100 --- */
+  { id: "VOC-ZH-001", en: "Family", zh: "家庭", pinyin: "jiātíng", ja: "家族", emoji: "👨‍👩‍👧‍👦", level: "Beginner", category: "Life" },
+  { id: "VOC-ZH-002", en: "Home", zh: "家", pinyin: "zhùjiā", ja: "家", emoji: "🏠", level: "Beginner", category: "Life" },
+  { id: "VOC-ZH-003", en: "Kitchen", zh: "厨房", pinyin: "chúfáng", ja: "台所", emoji: "🍳", level: "Beginner", category: "Life" },
+  { id: "VOC-ZH-004", en: "Window", zh: "窗户", pinyin: "chuānghu", ja: "窓", emoji: "🪟", level: "Beginner", category: "Life" },
+  { id: "VOC-ZH-005", en: "Door", zh: "门", pinyin: "mén", ja: "扉", emoji: "🚪", level: "Beginner", category: "Life" },
+  { id: "VOC-ZH-006", en: "Soap", zh: "肥皂", pinyin: "féizào", ja: "石鹸", emoji: "🧼", level: "Beginner", category: "Life" },
+  { id: "VOC-ZH-007", en: "Towel", zh: "毛巾", pinyin: "máojīn", ja: "タオル", emoji: "🧣", level: "Beginner", category: "Life" },
+  { id: "VOC-ZH-008", en: "Bed", zh: "床", pinyin: "chuáng", ja: "寝台", emoji: "🛏️", level: "Beginner", category: "Life" },
+  { id: "VOC-ZH-009", en: "Key", zh: "钥匙", pinyin: "yàoshi", ja: "鍵", emoji: "🔑", level: "Beginner", category: "Life" },
+  { id: "VOC-ZH-010", en: "Money", zh: "钱", pinyin: "qián", ja: "お金", emoji: "💰", level: "Beginner", category: "Life" },
+  { id: "VOC-ZH-011", en: "Teacher", zh: "老师", pinyin: "lǎoshī", ja: "先生", emoji: "🧑‍🏫", level: "Beginner", category: "School" },
+  { id: "VOC-ZH-012", en: "Student", zh: "学生", pinyin: "xuéshēng", ja: "生徒", emoji: "🧑‍🎓", level: "Beginner", category: "School" },
+  { id: "VOC-ZH-013", en: "Classroom", zh: "教室", pinyin: "jiàoshì", ja: "教室", emoji: "🏫", level: "Beginner", category: "School" },
+  { id: "VOC-ZH-014", en: "Desk", zh: "桌子", pinyin: "zhuōzi", ja: "机", emoji: "🪑", level: "Beginner", category: "School" },
+  { id: "VOC-ZH-015", en: "Paper", zh: "纸", pinyin: "zhǐ", ja: "紙", emoji: "📄", level: "Beginner", category: "School" },
+  { id: "VOC-ZH-016", en: "Pencil", zh: "铅笔", pinyin: "qiānbǐ", ja: "鉛筆", emoji: "✏️", level: "Beginner", category: "School" },
+  { id: "VOC-ZH-017", en: "Eraser", zh: "橡皮", pinyin: "xiàngpí", ja: "消しゴム", emoji: "🧽", level: "Beginner", category: "School" },
+  { id: "VOC-ZH-018", en: "Bag", zh: "书包", pinyin: "shūbāo", ja: "鞄", emoji: "🎒", level: "Beginner", category: "School" },
+  { id: "VOC-ZH-019", en: "Friend", zh: "朋友", pinyin: "péngyou", ja: "友達", emoji: "🤝", level: "Beginner", category: "School" },
+  { id: "VOC-ZH-020", en: "Homework", zh: "作业", pinyin: "zuòyè", ja: "宿題", emoji: "📝", level: "Beginner", category: "School" },
+  { id: "VOC-ZH-021", en: "Rice", zh: "米饭", pinyin: "mǐfàn", ja: "ご飯", emoji: "🍚", level: "Beginner", category: "Food" },
+  { id: "VOC-ZH-022", en: "Bread", zh: "面包", pinyin: "miànbāo", ja: "パン", emoji: "🍞", level: "Beginner", category: "Food" },
+  { id: "VOC-ZH-023", en: "Egg", zh: "鸡蛋", pinyin: "jīdàn", ja: "卵", emoji: "🥚", level: "Beginner", category: "Food" },
+  { id: "VOC-ZH-024", en: "Meat", zh: "肉", pinyin: "ròu", ja: "肉", emoji: "🍖", level: "Beginner", category: "Food" },
+  { id: "VOC-ZH-025", en: "Vegetable", zh: "蔬菜", pinyin: "shūcài", ja: "野菜", emoji: "🥦", level: "Beginner", category: "Food" },
+  { id: "VOC-ZH-026", en: "Fruit", zh: "水果", pinyin: "shuǐguǒ", ja: "果物", emoji: "🍎", level: "Beginner", category: "Food" },
+  { id: "VOC-ZH-027", en: "Tea", zh: "茶", pinyin: "chá", ja: "茶", emoji: "🍵", level: "Beginner", category: "Food" },
+  { id: "VOC-ZH-028", en: "Milk", zh: "牛奶", pinyin: "niúnǎi", ja: "牛乳", emoji: "🥛", level: "Beginner", category: "Food" },
+  { id: "VOC-ZH-029", en: "Salt", zh: "盐", pinyin: "yán", ja: "塩", emoji: "🧂", level: "Beginner", category: "Food" },
+  { id: "VOC-ZH-030", en: "Sugar", zh: "糖", pinyin: "táng", ja: "砂糖", emoji: "🍬", level: "Beginner", category: "Food" },
+  { id: "VOC-ZH-031", en: "Body", zh: "身体", pinyin: "shēntǐ", ja: "体", emoji: "🧍", level: "Beginner", category: "Body" },
+  { id: "VOC-ZH-032", en: "Head", zh: "头", pinyin: "tóu", ja: "頭", emoji: "🙆", level: "Beginner", category: "Body" },
+  { id: "VOC-ZH-033", en: "Face", zh: "脸", pinyin: "liǎn", ja: "顔", emoji: "😊", level: "Beginner", category: "Body" },
+  { id: "VOC-ZH-034", en: "Hair", zh: "头发", pinyin: "tóufa", ja: "髪", emoji: "💇", level: "Beginner", category: "Body" },
+  { id: "VOC-ZH-035", en: "Eye", zh: "眼睛", pinyin: "yǎnjīng", ja: "目", emoji: "👁️", level: "Beginner", category: "Body" },
+  { id: "VOC-ZH-036", en: "Ear", zh: "耳朵", pinyin: "ěrduo", ja: "耳", emoji: "👂", level: "Beginner", category: "Body" },
+  { id: "VOC-ZH-037", en: "Nose", zh: "鼻子", pinyin: "bízi", ja: "鼻", emoji: "👃", level: "Beginner", category: "Body" },
+  { id: "VOC-ZH-038", en: "Mouth", zh: "嘴", pinyin: "zuǐ", ja: "口", emoji: "👄", level: "Beginner", category: "Body" },
+  { id: "VOC-ZH-039", en: "Tooth", zh: "牙齿", pinyin: "yáchǐ", ja: "歯", emoji: "🦷", level: "Beginner", category: "Body" },
+  { id: "VOC-ZH-040", en: "Arm", zh: "胳膊", pinyin: "gēbo", ja: "腕", emoji: "💪", level: "Beginner", category: "Body" },
+  { id: "VOC-ZH-041", en: "Leg", zh: "腿", pinyin: "tuǐ", ja: "脚", emoji: "🦵", level: "Beginner", category: "Body" },
+  { id: "VOC-ZH-042", en: "Heart", zh: "心脏", pinyin: "xīnzàng", ja: "心臓", emoji: "❤️", level: "Beginner", category: "Body" },
+  { id: "VOC-ZH-043", en: "Sun", zh: "太陽", pinyin: "tàiyáng", ja: "太陽", emoji: "☀️", level: "Beginner", category: "Nature" },
+  { id: "VOC-ZH-044", en: "Moon", zh: "月亮", pinyin: "yuèliang", ja: "月", emoji: "🌙", level: "Beginner", category: "Nature" },
+  { id: "VOC-ZH-045", en: "Star", zh: "星星", pinyin: "xīngxing", ja: "星", emoji: "⭐", level: "Beginner", category: "Nature" },
+  { id: "VOC-ZH-046", en: "Sky", zh: "天空", pinyin: "tiānkōng", ja: "空", emoji: "☁️", level: "Beginner", category: "Nature" },
+  { id: "VOC-ZH-047", en: "Rain", zh: "雨", pinyin: "yǔ", ja: "雨", emoji: "☔", level: "Beginner", category: "Nature" },
+  { id: "VOC-ZH-048", en: "Wind", zh: "风", pinyin: "fēng", ja: "風", emoji: "🌬️", level: "Beginner", category: "Nature" },
+  { id: "VOC-ZH-049", en: "Flower", zh: "花", pinyin: "huā", ja: "花", emoji: "🌻", level: "Beginner", category: "Nature" },
+  { id: "VOC-ZH-050", en: "Mountain", zh: "山", pinyin: "shān", ja: "山", emoji: "⛰️", level: "Beginner", category: "Nature" },
+  { id: "VOC-ZH-051", en: "River", zh: "河", pinyin: "hé", ja: "川", emoji: "🏞️", level: "Beginner", category: "Nature" },
+  { id: "VOC-ZH-052", en: "Earth", zh: "地球", pinyin: "dìqiú", ja: "地球", emoji: "🌍", level: "Beginner", category: "Nature" },
+  { id: "VOC-ZH-053", en: "Animal", zh: "动物", pinyin: "dòngwù", ja: "動物", emoji: "🐾", level: "Beginner", category: "Animal" },
+  { id: "VOC-ZH-054", en: "Dog", zh: "狗", pinyin: "gǒu", ja: "犬", emoji: "🐶", level: "Beginner", category: "Animal" },
+  { id: "VOC-ZH-055", en: "Cat", zh: "猫", pinyin: "māo", ja: "猫", emoji: "🐱", level: "Beginner", category: "Animal" },
+  { id: "VOC-ZH-056", en: "Bird", zh: "鸟", pinyin: "niǎo", ja: "鳥", emoji: "🐦", level: "Beginner", category: "Animal" },
+  { id: "VOC-ZH-057", en: "Elephant", zh: "大象", pinyin: "dàxiàng", ja: "象", emoji: "🐘", level: "Beginner", category: "Animal" },
+  { id: "VOC-ZH-058", en: "Lion", zh: "狮子", pinyin: "shīzi", ja: "ライオン", emoji: "🦁", level: "Beginner", category: "Animal" },
+  { id: "VOC-ZH-059", en: "Giraffe", zh: "长颈鹿", pinyin: "chángjǐnglù", ja: "キリン", emoji: "🦒", level: "Beginner", category: "Animal" },
+  { id: "VOC-ZH-060", en: "Snake", zh: "蛇", pinyin: "shé", ja: "蛇", emoji: "🐍", level: "Beginner", category: "Animal" },
+  { id: "VOC-ZH-061", en: "Fish", zh: "鱼", pinyin: "yú", ja: "魚", emoji: "🐟", level: "Beginner", category: "Animal" },
+  { id: "VOC-ZH-062", en: "Bee", zh: "蜜蜂", pinyin: "mìfēng", ja: "蜂", emoji: "🐝", level: "Beginner", category: "Animal" },
+  { id: "VOC-ZH-063", en: "Car", zh: "汽车", pinyin: "qìchē", ja: "車", emoji: "🚗", level: "Beginner", category: "Town" },
+  { id: "VOC-ZH-064", en: "Bicycle", zh: "自行车", pinyin: "zìxíngchē", ja: "自転車", emoji: "🚲", level: "Beginner", category: "Town" },
+  { id: "VOC-ZH-065", en: "Bus", zh: "公共汽车", pinyin: "gōnggòng qìchē", ja: "バス", emoji: "🚌", level: "Beginner", category: "Town" },
+  { id: "VOC-ZH-066", en: "Market", zh: "市场", pinyin: "shìchǎng", ja: "市場", emoji: "🛒", level: "Beginner", category: "Town" },
+  { id: "VOC-ZH-067", en: "Hospital", zh: "医院", pinyin: "yīyuàn", ja: "病院", emoji: "🏥", level: "Beginner", category: "Town" },
+  { id: "VOC-ZH-068", en: "Road", zh: "道路", pinyin: "dàolù", ja: "道路", emoji: "🛣️", level: "Beginner", category: "Town" },
+  { id: "VOC-ZH-069", en: "Bridge", zh: "桥", pinyin: "qiáo", ja: "橋", emoji: "🌉", level: "Beginner", category: "Town" },
+  { id: "VOC-ZH-070", en: "Clothes", zh: "衣服", pinyin: "yīfu", ja: "服", emoji: "👕", level: "Beginner", category: "Town" },
+  { id: "VOC-ZH-071", en: "Shoe", zh: "鞋", pinyin: "xié", ja: "靴", emoji: "👟", level: "Beginner", category: "Town" },
+  { id: "VOC-ZH-072", en: "Hat", zh: "帽子", pinyin: "màozi", ja: "帽子", emoji: "👒", level: "Beginner", category: "Town" },
+  { id: "VOC-ZH-073", en: "Today", zh: "今天", pinyin: "jīntiān", ja: "今日", emoji: "📅", level: "Beginner", category: "Time" },
+  { id: "VOC-ZH-074", en: "Now", zh: "现在", pinyin: "xiànzài", ja: "今", emoji: "⏰", level: "Beginner", category: "Time" },
+  { id: "VOC-ZH-075", en: "Day", zh: "白天", pinyin: "báitiān", ja: "昼", emoji: "☀️", level: "Beginner", category: "Time" },
+  { id: "VOC-ZH-076", en: "Night", zh: "夜晚", pinyin: "yèwǎn", ja: "夜", emoji: "🌙", level: "Beginner", category: "Time" },
+  { id: "VOC-ZH-077", en: "Morning", zh: "早上", pinyin: "zǎoshang", ja: "朝", emoji: "🌅", level: "Beginner", category: "Time" },
+  { id: "VOC-ZH-078", en: "Sunday", zh: "星期日", pinyin: "xīngqīrì", ja: "日曜日", emoji: "⛪", level: "Beginner", category: "Time" },
+  { id: "VOC-ZH-079", en: "Monday", zh: "星期一", pinyin: "xīngqīyī", ja: "月曜日", emoji: "🌙", level: "Beginner", category: "Time" },
+  { id: "VOC-ZH-080", en: "Summer", zh: "夏天", pinyin: "xiàtiān", ja: "夏", emoji: "🌻", level: "Beginner", category: "Time" },
+  { id: "VOC-ZH-081", en: "Winter", zh: "冬天", pinyin: "dōngtiān", ja: "冬", emoji: "❄️", level: "Beginner", category: "Time" },
+  { id: "VOC-ZH-082", en: "Red", zh: "红色", pinyin: "hóngsè", ja: "赤", emoji: "🔴", level: "Beginner", category: "Color" },
+  { id: "VOC-ZH-083", en: "Blue", zh: "蓝色", pinyin: "lánsè", ja: "青", emoji: "🔵", level: "Beginner", category: "Color" },
+  { id: "VOC-ZH-084", en: "Green", zh: "绿色", pinyin: "lǜsè", ja: "緑", emoji: "🟢", level: "Beginner", category: "Color" },
+  { id: "VOC-ZH-085", en: "Yellow", zh: "黄色", pinyin: "huángsè", ja: "黄色", emoji: "🟡", level: "Beginner", category: "Color" },
+  { id: "VOC-ZH-086", en: "White", zh: "白色", pinyin: "báisè", ja: "白", emoji: "⚪", level: "Beginner", category: "Color" },
+  { id: "VOC-ZH-087", en: "Black", zh: "黑色", pinyin: "hēisè", ja: "黒", emoji: "⚫", level: "Beginner", category: "Color" },
+  { id: "VOC-ZH-088", en: "One", zh: "一", pinyin: "yī", ja: "一", emoji: "1️⃣", level: "Beginner", category: "Number" },
+  { id: "VOC-ZH-089", en: "Five", zh: "五", pinyin: "wǔ", ja: "五", emoji: "5️⃣", level: "Beginner", category: "Number" },
+  { id: "VOC-ZH-090", en: "Ten", zh: "十", pinyin: "shí", ja: "十", emoji: "🔟", level: "Beginner", category: "Number" },
+  { id: "VOC-ZH-091", en: "Good", zh: "好", pinyin: "hǎo", ja: "良い", emoji: "👍", level: "Beginner", category: "Action" },
+  { id: "VOC-ZH-092", en: "Bad", zh: "坏", pinyin: "huài", ja: "悪い", emoji: "👎", level: "Beginner", category: "Action" },
+  { id: "VOC-ZH-093", en: "Big", zh: "大", pinyin: "dà", ja: "大きい", emoji: "🐘", level: "Beginner", category: "Action" },
+  { id: "VOC-ZH-094", en: "Small", zh: "小", pinyin: "xiǎo", ja: "小さい", emoji: "🐜", level: "Beginner", category: "Action" },
+  { id: "VOC-ZH-095", en: "Happy", zh: "高兴", pinyin: "gāoxìng", ja: "幸せ", emoji: "😊", level: "Beginner", category: "Action" },
+  { id: "VOC-ZH-096", en: "Hot", zh: "热", pinyin: "rè", ja: "熱い", emoji: "🔥", level: "Beginner", category: "Action" },
+  { id: "VOC-ZH-097", en: "Cold", zh: "冷", pinyin: "lěng", ja: "寒い", emoji: "❄️", level: "Beginner", category: "Action" },
+  { id: "VOC-ZH-098", en: "Walk", zh: "走", pinyin: "zǒu", ja: "歩く", emoji: "🚶", level: "Beginner", category: "Action" },
+  { id: "VOC-ZH-099", en: "Run", zh: "跑", pinyin: "pǎo", ja: "走る", emoji: "🏃", level: "Beginner", category: "Action" },
+  { id: "VOC-ZH-100", en: "Play", zh: "玩", pinyin: "wán", ja: "遊ぶ", emoji: "🎮", level: "Beginner", category: "Action" },
+
+  /* --- 中級 (Intermediate) 101-200 --- */
+  { id: "VOC-ZH-101", en: "Experience", zh: "经验", pinyin: "jīngyàn", ja: "経験", emoji: "🧪", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-102", en: "Government", zh: "政府", pinyin: "zhèngfǔ", ja: "政府", emoji: "🏛️", level: "Intermediate", category: "Society" },
+  { id: "VOC-ZH-103", en: "Economy", zh: "经济", pinyin: "jīngjì", ja: "経済", emoji: "💹", level: "Intermediate", category: "Society" },
+  { id: "VOC-ZH-104", en: "Environment", zh: "环境", pinyin: "huánjìng", ja: "環境", emoji: "🌳", level: "Intermediate", category: "Nature" },
+  { id: "VOC-ZH-105", en: "Education", zh: "教育", pinyin: "jiàoyù", ja: "教育", emoji: "🎓", level: "Intermediate", category: "School" },
+  { id: "VOC-ZH-106", en: "Library", zh: "图书馆", pinyin: "túshūguǎn", ja: "図書館", emoji: "📚", level: "Intermediate", category: "Place" },
+  { id: "VOC-ZH-107", en: "Experiment", zh: "实验", pinyin: "shíyàn", ja: "実験", emoji: "🧪", level: "Intermediate", category: "Science" },
+  { id: "VOC-ZH-108", en: "History", zh: "历史", pinyin: "lìshǐ", ja: "歴史", emoji: "📜", level: "Intermediate", category: "School" },
+  { id: "VOC-ZH-109", en: "Future", zh: "未来", pinyin: "wèilái", ja: "未来", emoji: "🚀", level: "Intermediate", category: "Time" },
+  { id: "VOC-ZH-110", en: "Dream", zh: "梦想", pinyin: "mèngxiǎng", ja: "夢", emoji: "💭", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-111", en: "Information", zh: "信息", pinyin: "xìnxī", ja: "情報", emoji: "ℹ️", level: "Intermediate", category: "Daily" },
+  { id: "VOC-ZH-112", en: "Technology", zh: "技术", pinyin: "jìshù", ja: "技術", emoji: "💻", level: "Intermediate", category: "Science" },
+  { id: "VOC-ZH-113", en: "Invention", zh: "发明", pinyin: "fāmíng", ja: "発明", emoji: "💡", level: "Intermediate", category: "Science" },
+  { id: "VOC-ZH-114", en: "Opportunity", zh: "机会", pinyin: "jīhuì", ja: "機会", emoji: "🔑", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-115", en: "Relationship", zh: "关系", pinyin: "guānxi", ja: "関係", emoji: "👩‍❤️‍👨", level: "Intermediate", category: "People" },
+  { id: "VOC-ZH-116", en: "Culture", zh: "文化", pinyin: "wénhuà", ja: "文化", emoji: "👘", level: "Intermediate", category: "Society" },
+  { id: "VOC-ZH-117", en: "Tradition", zh: "传统", pinyin: "chuántǒng", ja: "伝統", emoji: "🏮", level: "Intermediate", category: "Society" },
+  { id: "VOC-ZH-118", en: "Effort", zh: "努力", pinyin: "nǔlì", ja: "努力", emoji: "🔥", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-119", en: "Success", zh: "成功", pinyin: "chénggōng", ja: "成功", emoji: "🏆", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-120", en: "Challenge", zh: "挑战", pinyin: "tiǎozhàn", ja: "挑戦", emoji: "🧗", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-121", en: "Medicine", zh: "药", pinyin: "yào", ja: "薬", emoji: "💊", level: "Intermediate", category: "Health" },
+  { id: "VOC-ZH-122", en: "Health", zh: "健康", pinyin: "jiànkāng", ja: "健康", emoji: "🥗", level: "Intermediate", category: "Health" },
+  { id: "VOC-ZH-123", en: "Volunteer", zh: "志愿者", pinyin: "zhìyuànzhě", ja: "志願者", emoji: "🙋", level: "Intermediate", category: "People" },
+  { id: "VOC-ZH-124", en: "Election", zh: "选举", pinyin: "xuǎnjǔ", ja: "選挙", emoji: "🗳️", level: "Intermediate", category: "Society" },
+  { id: "VOC-ZH-125", en: "Passport", zh: "护照", pinyin: "hùzhào", ja: "旅券", emoji: "🛂", level: "Intermediate", category: "Travel" },
+  { id: "VOC-ZH-126", en: "Airport", zh: "机场", pinyin: "jīchǎng", ja: "空港", emoji: "✈️", level: "Intermediate", category: "Travel" },
+  { id: "VOC-ZH-127", en: "Currency", zh: "货币", pinyin: "huòbì", ja: "通貨", emoji: "💴", level: "Intermediate", category: "Economy" },
+  { id: "VOC-ZH-128", en: "Celebrate", zh: "庆祝", pinyin: "qìngzhù", ja: "祝う", emoji: "🎉", level: "Intermediate", category: "Action" },
+  { id: "VOC-ZH-129", en: "Develop", zh: "发展", pinyin: "fāzhǎn", ja: "発展させる", emoji: "🏗️", level: "Intermediate", category: "Action" },
+  { id: "VOC-ZH-130", en: "Global", zh: "全球", pinyin: "quánqiú", ja: "地球規模の", emoji: "🌐", level: "Intermediate", category: "Nature" },
+  { id: "VOC-ZH-131", en: "Freedom", zh: "自由", pinyin: "zìyóu", ja: "自由", emoji: "🕊️", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-132", en: "Justice", zh: "正义", pinyin: "zhèngyì", ja: "正義", emoji: "⚖️", level: "Intermediate", category: "Society" },
+  { id: "VOC-ZH-133", en: "Signal", zh: "信号", pinyin: "xìnhào", ja: "信号", emoji: "🚥", level: "Intermediate", category: "Town" },
+  { id: "VOC-ZH-134", en: "Journey", zh: "旅行", pinyin: "lǚxíng", ja: "旅", emoji: "🧳", level: "Intermediate", category: "Travel" },
+  { id: "VOC-ZH-135", en: "Destination", zh: "目的地", pinyin: "mùdìdì", ja: "目的地", emoji: "📍", level: "Intermediate", category: "Travel" },
+  { id: "VOC-ZH-136", en: "Discovery", zh: "发现", pinyin: "fāxiàn", ja: "発見", emoji: "🔎", level: "Intermediate", category: "Science" },
+  { id: "VOC-ZH-137", en: "Energy", zh: "能源", pinyin: "néngyuán", ja: "エネルギー", emoji: "⚡", level: "Intermediate", category: "Science" },
+  { id: "VOC-ZH-138", en: "Climate", zh: "气候", pinyin: "qìhòu", ja: "気候", emoji: "🌡️", level: "Intermediate", category: "Nature" },
+  { id: "VOC-ZH-139", en: "Ocean", zh: "海洋", pinyin: "hǎiyáng", ja: "海洋", emoji: "🌊", level: "Intermediate", category: "Nature" },
+  { id: "VOC-ZH-140", en: "Forest", zh: "森林", pinyin: "sēnlín", ja: "森", emoji: "🌲", level: "Intermediate", category: "Nature" },
+  { id: "VOC-ZH-141", en: "Agriculture", zh: "农业", pinyin: "nóngyè", ja: "農業", emoji: "🚜", level: "Intermediate", category: "Life" },
+  { id: "VOC-ZH-142", en: "Industry", zh: "工业", pinyin: "gōngyè", ja: "産業", emoji: "🏭", level: "Intermediate", category: "Society" },
+  { id: "VOC-ZH-143", en: "Trade", zh: "贸易", pinyin: "màoyì", ja: "貿易", emoji: "🚢", level: "Intermediate", category: "Economy" },
+  { id: "VOC-ZH-144", en: "Communication", zh: "通信", pinyin: "tōngxìn", ja: "通信", emoji: "📡", level: "Intermediate", category: "Tech" },
+  { id: "VOC-ZH-145", en: "Internet", zh: "互联网", pinyin: "hùliánwǎng", ja: "インターネット", emoji: "🌐", level: "Intermediate", category: "Tech" },
+  { id: "VOC-ZH-146", en: "Software", zh: "软件", pinyin: "ruǎnjiàn", ja: "ソフトウェア", emoji: "💿", level: "Intermediate", category: "Tech" },
+  { id: "VOC-ZH-147", en: "Modern", zh: "现代", pinyin: "xiàndài", ja: "現代的な", emoji: "🏙️", level: "Intermediate", category: "Time" },
+  { id: "VOC-ZH-148", en: "Citizen", zh: "公民", pinyin: "gōngmín", ja: "国民", emoji: "👥", level: "Intermediate", category: "Society" },
+  { id: "VOC-ZH-149", en: "Leader", zh: "领导", pinyin: "lǐngdǎo", ja: "指導者", emoji: "👑", level: "Intermediate", category: "People" },
+  { id: "VOC-ZH-150", en: "Peace", zh: "和平", pinyin: "hépíng", ja: "平和", emoji: "☮️", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-151", en: "Solution", zh: "解决方案", pinyin: "jiějué fāng'àn", ja: "解決策", emoji: "✅", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-152", en: "Knowledge", zh: "知识", pinyin: "zhīshi", ja: "知識", emoji: "📖", level: "Intermediate", category: "Academic" },
+  { id: "VOC-ZH-153", en: "Skill", zh: "技能", pinyin: "jìnéng", ja: "技能", emoji: "🛠️", level: "Intermediate", category: "Academic" },
+  { id: "VOC-ZH-154", en: "Confidence", zh: "自信", pinyin: "zìxìn", ja: "自信", emoji: "💪", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-155", en: "Strategy", zh: "战略", pinyin: "zhànlüè", ja: "戦略", emoji: "🎯", level: "Intermediate", category: "Business" },
+  { id: "VOC-ZH-156", en: "Investment", zh: "投资", pinyin: "tóuzī", ja: "投資", emoji: "📈", level: "Intermediate", category: "Economy" },
+  { id: "VOC-ZH-157", en: "Quality", zh: "质量", pinyin: "zhìliàng", ja: "品質", emoji: "⭐", level: "Intermediate", category: "Business" },
+  { id: "VOC-ZH-158", en: "Resource", zh: "资源", pinyin: "zīyuán", ja: "資源", emoji: "💎", level: "Intermediate", category: "Nature" },
+  { id: "VOC-ZH-159", en: "Analysis", zh: "分析", pinyin: "fēnxī", ja: "分析", emoji: "📊", level: "Intermediate", category: "Academic" },
+  { id: "VOC-ZH-160", en: "Safety", zh: "安全", pinyin: "ānquán", ja: "安全", emoji: "⛑️", level: "Intermediate", category: "Life" },
+  /* 欠番を埋めるための追加語彙（中級） */
+  { id: "VOC-ZH-161", en: "Method", zh: "方法", pinyin: "fāngfǎ", ja: "方法", emoji: "🛠️", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-162", en: "Process", zh: "过程", pinyin: "guòchéng", ja: "過程", emoji: "🔄", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-163", en: "Standard", zh: "标准", pinyin: "biāozhǔn", ja: "標準", emoji: "📏", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-164", en: "System", zh: "系统", pinyin: "xìtǒng", ja: "体系", emoji: "⚙️", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-165", en: "Theory", zh: "理论", pinyin: "lǐlùn", ja: "理論", emoji: "📖", level: "Intermediate", category: "Academic" },
+  { id: "VOC-ZH-166", en: "Evidence", zh: "证据", pinyin: "zhèngjù", ja: "証拠", emoji: "🔍", level: "Intermediate", category: "Law" },
+  { id: "VOC-ZH-167", en: "Opinion", zh: "意见", pinyin: "yìjiàn", ja: "意見", emoji: "💬", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-168", en: "Decision", zh: "决定", pinyin: "juédìng", ja: "決定", emoji: "⚖️", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-169", en: "Activity", zh: "活動", pinyin: "huódòng", ja: "活動", emoji: "🏃", level: "Intermediate", category: "Life" },
+  { id: "VOC-ZH-170", en: "Result", zh: "结果", pinyin: "jiéguǒ", ja: "結果", emoji: "🏁", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-171", en: "Purpose", zh: "目的", pinyin: "mùdì", ja: "目的", emoji: "🎯", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-172", en: "Support", zh: "支持", pinyin: "zhīchí", ja: "支持", emoji: "🤝", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-173", en: "Effect", zh: "效果", pinyin: "xiàoguǒ", ja: "効果", emoji: "✨", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-174", en: "Pressure", zh: "压力", pinyin: "yālì", ja: "圧力", emoji: "🎈", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-175", en: "Degree", zh: "程度", pinyin: "chéngdù", ja: "程度", emoji: "🌡️", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-176", en: "Balance", zh: "平衡", pinyin: "pínghéng", ja: "均衡", emoji: "⚖️", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-177", en: "Value", zh: "价值", pinyin: "jiàzhí", ja: "価値", emoji: "💎", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-178", en: "Target", zh: "目标", pinyin: "mùbiāo", ja: "標的", emoji: "🎯", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-179", en: "Risk", zh: "风险", pinyin: "fēngxiǎn", ja: "危険", emoji: "⚠️", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-180", en: "Factor", zh: "要素", pinyin: "yàosù", ja: "要素", emoji: "🧩", level: "Intermediate", category: "Abstract" },
+  { id: "VOC-ZH-181", en: "Growth", zh: "增长", pinyin: "zēngzhǎng", ja: "成長", emoji: "📈", level: "Intermediate", category: "Economy" },
+  { id: "VOC-ZH-182", en: "Market", zh: "市场", pinyin: "shìchǎng", ja: "市場", emoji: "🏪", level: "Intermediate", category: "Economy" },
+  { id: "VOC-ZH-183", en: "Profit", zh: "利润", pinyin: "lìrùn", ja: "利益", emoji: "💰", level: "Intermediate", category: "Economy" },
+  { id: "VOC-ZH-184", en: "Loss", zh: "损失", pinyin: "sǔnshī", ja: "損失", emoji: "📉", level: "Intermediate", category: "Economy" },
+  { id: "VOC-ZH-185", en: "Price", zh: "价格", pinyin: "jiàgé", ja: "価格", emoji: "🏷️", level: "Intermediate", category: "Economy" },
+  { id: "VOC-ZH-186", en: "Product", zh: "产品", pinyin: "chǎnpǐn", ja: "製品", emoji: "📦", level: "Intermediate", category: "Business" },
+  { id: "VOC-ZH-187", en: "Service", zh: "服务", pinyin: "fúwù", ja: "奉仕", emoji: "🛎️", level: "Intermediate", category: "Business" },
+  { id: "VOC-ZH-188", en: "Contract", zh: "合同", pinyin: "hétóng", ja: "契約", emoji: "📝", level: "Intermediate", category: "Business" },
+  { id: "VOC-ZH-189", en: "Customer", zh: "客户", pinyin: "kèhù", ja: "顧客", emoji: "👤", level: "Intermediate", category: "Business" },
+  { id: "VOC-ZH-190", en: "Company", zh: "公司", pinyin: "gōngsī", ja: "会社", emoji: "🏢", level: "Intermediate", category: "Business" },
+  { id: "VOC-ZH-191", en: "Meeting", zh: "会议", pinyin: "huìyì", ja: "会議", emoji: "🤝", level: "Intermediate", category: "Business" },
+  { id: "VOC-ZH-192", en: "Project", zh: "项目", pinyin: "xiàngmù", ja: "計画", emoji: "📊", level: "Intermediate", category: "Business" },
+  { id: "VOC-ZH-193", en: "Team", zh: "团队", pinyin: "tuánduì", ja: "班", emoji: "👥", level: "Intermediate", category: "Business" },
+  { id: "VOC-ZH-194", en: "Work", zh: "工作", pinyin: "gōngzuò", ja: "仕事", emoji: "💼", level: "Intermediate", category: "Life" },
+  { id: "VOC-ZH-195", en: "Office", zh: "办公室", pinyin: "bàngōngshì", ja: "事務所", emoji: "🏬", level: "Intermediate", category: "Place" },
+  { id: "VOC-ZH-196", en: "Message", zh: "消息", pinyin: "xiāoxi", ja: "伝言", emoji: "📧", level: "Intermediate", category: "Daily" },
+  { id: "VOC-ZH-197", en: "Phone", zh: "电话", pinyin: "diànhuà", ja: "電話", emoji: "📱", level: "Intermediate", category: "Daily" },
+  { id: "VOC-ZH-198", en: "Computer", zh: "电脑", pinyin: "diànnǎo", ja: "計算機", emoji: "💻", level: "Intermediate", category: "Tech" },
+  { id: "VOC-ZH-199", en: "Data", zh: "数据", pinyin: "shùjù", ja: "資料", emoji: "📉", level: "Intermediate", category: "Tech" },
+  { id: "VOC-ZH-200", en: "Network", zh: "网络", pinyin: "wǎngluò", ja: "網", emoji: "🌐", level: "Intermediate", category: "Tech" },
+
+  /* --- 上級 (Advanced) 201-235 --- */
+  { id: "VOC-ZH-201", en: "Philosophy", zh: "哲学", pinyin: "zhéxué", ja: "哲学", emoji: "🧐", level: "Advanced", category: "Academic" },
+  { id: "VOC-ZH-202", en: "Architecture", zh: "建筑", pinyin: "jiànzhù", ja: "建築", emoji: "🏛️", level: "Advanced", category: "Art" },
+  { id: "VOC-ZH-203", en: "Constitution", zh: "宪法", pinyin: "xiànfǎ", ja: "憲法", emoji: "📜", level: "Advanced", category: "Law" },
+  { id: "VOC-ZH-204", en: "Innovation", zh: "创新", pinyin: "chuàngxīn", ja: "革新", emoji: "🚀", level: "Advanced", category: "Tech" },
+  { id: "VOC-ZH-205", en: "Sustainability", zh: "可持续性", pinyin: "kě chíxù xìng", ja: "持続可能性", emoji: "♻️", level: "Advanced", category: "Environment" },
+  { id: "VOC-ZH-206", en: "Democracy", zh: "民主主义", pinyin: "mínzhǔ zhǔyì", ja: "民主主義", emoji: "🗳️", level: "Advanced", category: "Society" },
+  { id: "VOC-ZH-207", en: "Artificial Intelligence", zh: "人工智能", pinyin: "réngōng zhìnéng", ja: "人工知能", emoji: "🤖", level: "Advanced", category: "Tech" },
+  { id: "VOC-ZH-208", en: "Global Warming", zh: "全球变暖", pinyin: "quánqiú biànnuǎn", ja: "地球温暖化", emoji: "🌡️", level: "Advanced", category: "Environment" },
+  { id: "VOC-ZH-209", en: "Diversity", zh: "多样性", pinyin: "duōyàngxìng", ja: "多様性", emoji: "🌈", level: "Advanced", category: "Society" },
+  { id: "VOC-ZH-210", en: "Psychology", zh: "心理学", pinyin: "xīnlǐxué", ja: "心理学", emoji: "🧠", level: "Advanced", category: "Academic" },
+  { id: "VOC-ZH-211", en: "Ethics", zh: "伦理", pinyin: "lúnlǐ", ja: "倫理", emoji: "⚖️", level: "Advanced", category: "Philosophy" },
+  { id: "VOC-ZH-212", en: "Hypothesis", zh: "假设", pinyin: "jiǎshè", ja: "仮説", emoji: "🧪", level: "Advanced", category: "Science" },
+  { id: "VOC-ZH-213", en: "Quantum", zh: "量子", pinyin: "liàngzǐ", ja: "量子", emoji: "⚛️", level: "Advanced", category: "Science" },
+  { id: "VOC-ZH-214", en: "Evolution", zh: "进化", pinyin: "jìnhuà", ja: "進化", emoji: "🐒", level: "Advanced", category: "Science" },
+  { id: "VOC-ZH-215", en: "Infrastructure", zh: "基础设施", pinyin: "jīchǔ shèshī", ja: "社会基盤", emoji: "🏗️", level: "Advanced", category: "Town" },
+  { id: "VOC-ZH-216", en: "Negotiation", zh: "谈判", pinyin: "tánpàn", ja: "交渉", emoji: "🤝", level: "Advanced", category: "Business" },
+  { id: "VOC-ZH-217", en: "Bureaucracy", zh: "官僚体制", pinyin: "guānliáo tǐzhì", ja: "官僚制度", emoji: "🏢", level: "Advanced", category: "Society" },
+  { id: "VOC-ZH-218", en: "Human Rights", zh: "人权", pinyin: "rénquán", ja: "人権", emoji: "🕊️", level: "Advanced", category: "Law" },
+  { id: "VOC-ZH-219", en: "Sovereignty", zh: "主权", pinyin: "zhǔquán", ja: "主権", emoji: "👑", level: "Advanced", category: "Law" },
+  { id: "VOC-ZH-220", en: "Paradox", zh: "悖论", pinyin: "bèilùn", ja: "逆説", emoji: "🌀", level: "Advanced", category: "Philosophy" },
+  { id: "VOC-ZH-221", en: "Intuition", zh: "直觉", pinyin: "zhíjué", ja: "直感", emoji: "⚡", level: "Advanced", category: "Abstract" },
+  { id: "VOC-ZH-222", en: "Consciousness", zh: "意识", pinyin: "yìshí", ja: "意識", emoji: "👁️", level: "Advanced", category: "Abstract" },
+  { id: "VOC-ZH-223", en: "Aesthetics", zh: "美学", pinyin: "měixué", ja: "美学", emoji: "🖼️", level: "Advanced", category: "Art" },
+  { id: "VOC-ZH-224", en: "Renaissance", zh: "文艺复兴", pinyin: "wényì fùxīng", ja: "ルネサンス", emoji: "🎨", level: "Advanced", category: "History" },
+  { id: "VOC-ZH-225", en: "Diplomacy", zh: "外交", pinyin: "wàijiāo", ja: "外交", emoji: "🌍", level: "Advanced", category: "Society" },
+  { id: "VOC-ZH-226", en: "Pandemic", zh: "全球大流行", pinyin: "quánqiú dà liúxíng", ja: "パンデミック", emoji: "😷", level: "Advanced", category: "Health" },
+  { id: "VOC-ZH-227", en: "Vaccine", zh: "疫苗", pinyin: "yìmiáo", ja: "ワクチン", emoji: "💉", level: "Advanced", category: "Health" },
+  { id: "VOC-ZH-228", en: "Galaxy", zh: "银河", pinyin: "xīnghé", ja: "銀河", emoji: "🌌", level: "Advanced", category: "Science" },
+  { id: "VOC-ZH-229", en: "Robot", zh: "机器人", pinyin: "jīqìrén", ja: "ロボット", emoji: "🤖", level: "Advanced", category: "Tech" },
+  { id: "VOC-ZH-230", en: "Privacy", zh: "隐私", pinyin: "yǐnsī", ja: "プライバシー", emoji: "🛡️", level: "Advanced", category: "Tech" },
+  { id: "VOC-ZH-231", en: "Copyright", zh: "版权", pinyin: "bǎnquán", ja: "著作権", emoji: "©️", level: "Advanced", category: "Law" },
+  { id: "VOC-ZH-232", en: "Algorithm", zh: "算法", pinyin: "suànfǎ", ja: "アルゴリズム", emoji: "🔢", level: "Advanced", category: "Tech" },
+  { id: "VOC-ZH-233", en: "Inflation", zh: "通货膨胀", pinyin: "tōnghuò péngzhàng", ja: "インフレ", emoji: "🎈", level: "Advanced", category: "Economy" },
+  { id: "VOC-ZH-234", en: "Entrepreneur", zh: "企业家", pinyin: "qǐyèjiā", ja: "起業家", emoji: "💼", level: "Advanced", category: "Business" },
+  { id: "VOC-ZH-235", en: "Satellite", zh: "卫星", pinyin: "wèixīng", ja: "人工衛星", emoji: "🛰️", level: "Advanced", category: "Tech" },
+];
+
+/* ================= 文法データ：全レベル（001-076） ================= */
+const grammarData = [
+  /* 初級 (Beginner) */
+  { id: "GRAM-001", title: "基本の挨拶", sw_phrase: "你好 nǐ hǎo", en_phrase: "How are you?", ja_trans: "こんにちは。", ja_explanation: "最も基本的で一般的な中国語の挨拶です。", level: "Beginner" },
+  { id: "GRAM-002", title: "元気な返事", sw_phrase: "我很好，谢谢！ wǒ hěn hǎo, xièxie!", en_phrase: "Very good, thank you!", ja_trans: "とても元気です、ありがとう。", ja_explanation: "挨拶に対する定番の返答表現です。", level: "Beginner" },
+  { id: "GRAM-003", title: "自己紹介", sw_phrase: "我叫Yuki。 wǒ jiào Yuki.", en_phrase: "My name is Yuki.", ja_trans: "私の名前はユキです。", ja_explanation: "「我叫＋名前」で自己紹介を表します。", level: "Beginner" },
+  { id: "GRAM-004", title: "出身", sw_phrase: "我来自日本。 wǒ láizì Rìběn.", en_phrase: "I am from Japan.", ja_trans: "日本から来ました。", ja_explanation: "「来自」は出身地を表します。", level: "Beginner" },
+  { id: "GRAM-005", title: "感謝（食事）", sw_phrase: "谢谢这顿饭！ xièxie zhè dùn fàn!", en_phrase: "Thank you for the food!", ja_trans: "ごちそうさまでした。", ja_explanation: "食事に対する感謝を表す言い方です。", level: "Beginner" },
+  { id: "GRAM-006", title: "丁寧なお願い", sw_phrase: "请给我水。 qǐng gěi wǒ shuǐ.", en_phrase: "Give me water, please.", ja_trans: "お水をください。", ja_explanation: "「请」は丁寧な依頼を表す語です。", level: "Beginner" },
+  { id: "GRAM-007", title: "現在の動作（質問）", sw_phrase: "你现在在做什么？ nǐ xiànzài zài zuò shénme?", en_phrase: "What are you doing now?", ja_trans: "今、何をしていますか？", ja_explanation: "「在＋動詞」で進行中の動作を表します。", level: "Beginner" },
+  { id: "GRAM-008", title: "現在進行形", sw_phrase: "我在学习中文。 wǒ zài xuéxí zhōngwén.", en_phrase: "I am studying Chinese.", ja_trans: "私は中国語を勉強しています。", ja_explanation: "動作の進行を示す基本構文です。", level: "Beginner" },
+  { id: "GRAM-009", title: "過去の出来事", sw_phrase: "我昨天吃了水果。 wǒ zuótiān chī le shuǐguǒ.", en_phrase: "I ate fruit yesterday.", ja_trans: "昨日、果物を食べました。", ja_explanation: "「了」は動作の完了を示します。", level: "Beginner" },
+  { id: "GRAM-010", title: "未来の予定", sw_phrase: "我明天要去旅行。 wǒ míngtiān yào qù lǚxíng.", en_phrase: "I will travel tomorrow.", ja_trans: "明日、旅行に行きます。", ja_explanation: "「要」は近い未来の予定を表します。", level: "Beginner" },
+  { id: "GRAM-011", title: "否定の表現", sw_phrase: "我不懂英语。 wǒ bù dǒng yīngyǔ.", en_phrase: "I don't understand English.", ja_trans: "英語がわかりません。", ja_explanation: "「不」は動詞や形容詞の否定に使います。", level: "Beginner" },
+  { id: "GRAM-012", title: "場所を尋ねる", sw_phrase: "市场在哪里？ shìchǎng zài nǎlǐ?", en_phrase: "Where is the market?", ja_trans: "市場はどこですか？", ja_explanation: "「在哪里」で場所を尋ねます。", level: "Beginner" },
+  { id: "GRAM-013", title: "値段を尋ねる", sw_phrase: "多少钱？ duōshǎo qián?", en_phrase: "How much is it?", ja_trans: "いくらですか？", ja_explanation: "買い物で非常によく使う表現です。", level: "Beginner" },
+  { id: "GRAM-014", title: "所有の表現", sw_phrase: "我有一个哥哥。 wǒ yǒu yí gè gēge.", en_phrase: "I have an older brother.", ja_trans: "私には兄が一人います。", ja_explanation: "「有」は所有や存在を表します。", level: "Beginner" },
+  { id: "GRAM-015", title: "許可を求める", sw_phrase: "我可以进去吗？ wǒ kěyǐ jìnqù ma?", en_phrase: "May I come in?", ja_trans: "入ってもいいですか？", ja_explanation: "「可以吗」で許可を尋ねます。", level: "Beginner" },
+  { id: "GRAM-016", title: "希望を伝える", sw_phrase: "我想买这个。 wǒ xiǎng mǎi zhège.", en_phrase: "I want to buy this.", ja_trans: "これを買いたいです。", ja_explanation: "「想」は希望や意志を表します。", level: "Beginner" },
+  { id: "GRAM-017", title: "謝罪", sw_phrase: "对不起，我迟到了。 duìbuqǐ, wǒ chídào le.", en_phrase: "Sorry I'm late.", ja_trans: "遅れてすみません。", ja_explanation: "「对不起」は代表的な謝罪表現です。", level: "Beginner" },
+  { id: "GRAM-018", title: "理解の確認", sw_phrase: "你明白了吗？ nǐ míngbái le ma?", en_phrase: "Do you understand?", ja_trans: "わかりましたか？", ja_explanation: "「了吗？」で完了や理解を確認します。", level: "Beginner" },
+  { id: "GRAM-019", title: "肯定の返事", sw_phrase: "是的，我明白了。 shì de, wǒ míngbái le.", en_phrase: "Yes, I understand.", ja_trans: "はい、わかりました。", ja_explanation: "「是的」は肯定の返答です。", level: "Beginner" },
+  { id: "GRAM-020", title: "時間の表現", sw_phrase: "现在是九点。 xiànzài shì jiǔ diǎn.", en_phrase: "It is nine o'clock now.", ja_trans: "今は9時です。", ja_explanation: "「是」で時間を表します。", level: "Beginner" },
+  { id: "GRAM-021", title: "疲労を伝える", sw_phrase: "我很累。 wǒ hěn lèi.", en_phrase: "I am very tired.", ja_trans: "とても疲れています。", ja_explanation: "「很＋形容詞」は自然な表現です。", level: "Beginner" },
+  { id: "GRAM-022", title: "別れの挨拶", sw_phrase: "待会儿见！ dài huìr jiàn!", en_phrase: "See you later!", ja_trans: "また後で！", ja_explanation: "短時間後の再会を示します。", level: "Beginner" },
+  { id: "GRAM-023", title: "天気", sw_phrase: "今天是晴天。 jīntiān shì qíngtiān.", en_phrase: "Today is sunny.", ja_trans: "今日は晴れです。", ja_explanation: "「是＋名詞」で状態を表します。", level: "Beginner" },
+  { id: "GRAM-024", title: "方向（右）", sw_phrase: "向右转。 xiàng yòu zhuǎn.", en_phrase: "Turn right.", ja_trans: "右に曲がってください。", ja_explanation: "道案内の基本表現です。", level: "Beginner" },
+  { id: "GRAM-025", title: "同意", sw_phrase: "我也是！ wǒ yě shì!", en_phrase: "Me too!", ja_trans: "私もです！", ja_explanation: "「也」は「〜も」を表します。", level: "Beginner" },
+  { id: "GRAM-026", title: "注文", sw_phrase: "请给我咖啡。 qǐng gěi wǒ kāfēi.", en_phrase: "Coffee, please.", ja_trans: "コーヒーをください。", ja_explanation: "飲食店での基本表現です。", level: "Beginner" },
+  { id: "GRAM-027", title: "手伝いの申し出", sw_phrase: "我可以帮你吗？ wǒ kěyǐ bāng nǐ ma?", en_phrase: "Can I help you?", ja_trans: "お手伝いしましょうか？", ja_explanation: "「帮」は助けるという意味です。", level: "Beginner" },
+  { id: "GRAM-028", title: "名前を聞く", sw_phrase: "你叫什么名字？ nǐ jiào shénme míngzi?", en_phrase: "What is your name?", ja_trans: "お名前は何ですか？", ja_explanation: "名前を尋ねる定型文です。", level: "Beginner" },
+  { id: "GRAM-029", title: "年齢", sw_phrase: "我二十岁。 wǒ èrshí suì.", en_phrase: "I am twenty.", ja_trans: "私は20歳です。", ja_explanation: "年齢には「岁」を使います。", level: "Beginner" },
+  { id: "GRAM-030", title: "好きな物", sw_phrase: "我喜欢这个。 wǒ xǐhuān zhège.", en_phrase: "I like this.", ja_trans: "これが好きです。", ja_explanation: "「喜欢」は好みを表します。", level: "Beginner" },
+  { id: "GRAM-031", title: "嫌い", sw_phrase: "我不喜欢牛奶。 wǒ bù xǐhuān niúnǎi.", en_phrase: "I don't like milk.", ja_trans: "牛乳が好きではありません。", ja_explanation: "「不」で好みを否定します。", level: "Beginner" },
+  { id: "GRAM-032", title: "友人紹介", sw_phrase: "这是我的朋友。 zhè shì wǒ de péngyou.", en_phrase: "This is my friend.", ja_trans: "こちらは私の友人です。", ja_explanation: "「这是〜」は紹介表現です。", level: "Beginner" },
+  { id: "GRAM-033", title: "居住地", sw_phrase: "我住在东京。 wǒ zhù zài Dōngjīng.", en_phrase: "I live in Tokyo.", ja_trans: "東京に住んでいます。", ja_explanation: "「住在」で居住地を表します。", level: "Beginner" },
+  { id: "GRAM-034", title: "職業", sw_phrase: "我是老师。 wǒ shì lǎoshī.", en_phrase: "I am a teacher.", ja_trans: "私は教師です。", ja_explanation: "「我是＋職業」で表します。", level: "Beginner" },
+  { id: "GRAM-035", title: "行き先", sw_phrase: "你要去哪里？ nǐ yào qù nǎlǐ?", en_phrase: "Where are you going?", ja_trans: "どこへ行きますか？", ja_explanation: "未来の行動を尋ねます。", level: "Beginner" },
+  { id: "GRAM-036", title: "帰宅", sw_phrase: "我要回家。 wǒ yào huí jiā.", en_phrase: "I am going home.", ja_trans: "家に帰ります。", ja_explanation: "「回家」は帰宅を意味します。", level: "Beginner" },
+  { id: "GRAM-037", title: "冷たい水", sw_phrase: "我想要冷水。 wǒ xiǎng yào lěng shuǐ.", en_phrase: "I want cold water.", ja_trans: "冷たい水が欲しいです。", ja_explanation: "形容詞は名詞の前に置きます。", level: "Beginner" },
+  { id: "GRAM-038", title: "熱い飲み物", sw_phrase: "热茶。 rè chá.", en_phrase: "Hot tea.", ja_trans: "熱いお茶。", ja_explanation: "簡潔な名詞句表現です。", level: "Beginner" },
+  { id: "GRAM-039", title: "トイレの場所", sw_phrase: "厕所在哪里？ cèsuǒ zài nǎlǐ?", en_phrase: "Where is the restroom?", ja_trans: "トイレはどこですか？", ja_explanation: "旅行で重要な表現です。", level: "Beginner" },
+  { id: "GRAM-040", title: "在庫確認", sw_phrase: "有水果吗？ yǒu shuǐguǒ ma?", en_phrase: "Is there fruit?", ja_trans: "果物はありますか？", ja_explanation: "「有吗？」で有無を尋ねます。", level: "Beginner" },
+
+  /* 中級 (Intermediate) */
+  { id: "GRAM-041", title: "理由", sw_phrase: "因为我有工作，所以不能去。 yīnwèi wǒ yǒu gōngzuò, suǒyǐ bùnéng qù.", en_phrase: "Because I have work, I can't go.", ja_trans: "仕事があるので行けません。", ja_explanation: "「因为…所以…」は原因と結果を表す基本構文です。", level: "Intermediate" },
+  { id: "GRAM-042", title: "条件", sw_phrase: "如果你想，我可以帮你。 rúguǒ nǐ xiǎng, wǒ kěyǐ bāng nǐ.", en_phrase: "If you want, I can help you.", ja_trans: "もし望むなら手伝います。", ja_explanation: "「如果」は仮定条件を示します。", level: "Intermediate" },
+  { id: "GRAM-043", title: "逆説", sw_phrase: "我知道，但是我忘了。 wǒ zhīdào, dànshì wǒ wàng le.", en_phrase: "I know, but I forgot.", ja_trans: "知っていますが、忘れました。", ja_explanation: "「但是」は逆の内容をつなぐ接続詞です。", level: "Intermediate" },
+  { id: "GRAM-044", title: "選択", sw_phrase: "你要茶还是咖啡？ nǐ yào chá háishì kāfēi?", en_phrase: "Tea or coffee?", ja_trans: "お茶ですか、それともコーヒーですか？", ja_explanation: "「还是」は疑問文で選択を表します。", level: "Intermediate" },
+  { id: "GRAM-045", title: "過去の時間", sw_phrase: "当我还是孩子的时候…… dāng wǒ háishi háizi de shíhou...", en_phrase: "When I was a child...", ja_trans: "私が子供だった時…", ja_explanation: "「当…的时候」は時点を表します。", level: "Intermediate" },
+  { id: "GRAM-046", title: "伝聞の表現", sw_phrase: "他说他会来。 tā shuō tā huì lái.", en_phrase: "He said that he would come.", ja_trans: "彼は来ると言いました。", ja_explanation: "動詞「说」の後に内容文を置きます。", level: "Intermediate" },
+  { id: "GRAM-047", title: "目的の表現", sw_phrase: "我学习是为了明白。 wǒ xuéxí shì wèile míngbái.", en_phrase: "I study in order to understand.", ja_trans: "理解するために勉強します。", ja_explanation: "「为了」は目的を明確に示します。", level: "Intermediate" },
+  { id: "GRAM-048", title: "比較", sw_phrase: "这个比那个好。 zhège bǐ nàge hǎo.", en_phrase: "This is better than that.", ja_trans: "これはあれより良いです。", ja_explanation: "「比」は比較対象を示します。", level: "Intermediate" },
+  { id: "GRAM-049", title: "最上級", sw_phrase: "我最喜欢这个。 wǒ zuì xǐhuān zhège.", en_phrase: "I like this the most.", ja_trans: "これが一番好きです。", ja_explanation: "「最」は最上級を表します。", level: "Intermediate" },
+  { id: "GRAM-050", title: "勧誘", sw_phrase: "我们现在走吧！ wǒmen xiànzài zǒu ba!", en_phrase: "Let's go now!", ja_trans: "今行きましょう！", ja_explanation: "語尾の「吧」で柔らかく勧誘します。", level: "Intermediate" },
+  { id: "GRAM-051", title: "禁止", sw_phrase: "别这样做！ bié zhèyàng zuò!", en_phrase: "Don't do this!", ja_trans: "そんなことしないで！", ja_explanation: "「别」は禁止を表す命令形です。", level: "Intermediate" },
+  { id: "GRAM-052", title: "継続（まだ）", sw_phrase: "他还在读书。 tā hái zài dúshū.", en_phrase: "He is still studying.", ja_trans: "彼はまだ勉強しています。", ja_explanation: "「还在」は動作の継続を示します。", level: "Intermediate" },
+  { id: "GRAM-053", title: "直前の完了", sw_phrase: "我刚吃完。 wǒ gāng chī wán.", en_phrase: "I have just eaten.", ja_trans: "たった今食べ終わりました。", ja_explanation: "「刚」は直前の出来事を表します。", level: "Intermediate" },
+  { id: "GRAM-054", title: "継続の命令", sw_phrase: "继续读吧。 jìxù dú ba.", en_phrase: "Keep reading.", ja_trans: "読み続けてください。", ja_explanation: "「继续」は動作の継続を指示します。", level: "Intermediate" },
+  { id: "GRAM-055", title: "代替", sw_phrase: "喝水，不要喝汽水。 hē shuǐ, búyào hē qìshuǐ.", en_phrase: "Drink water instead of soda.", ja_trans: "ソーダではなく水を飲みなさい。", ja_explanation: "否定命令で代替行動を示します。", level: "Intermediate" },
+  { id: "GRAM-056", title: "〜の前に", sw_phrase: "吃饭前要洗手。 chīfàn qián yào xǐ shǒu.", en_phrase: "Wash your hands before eating.", ja_trans: "食事の前に手を洗いなさい。", ja_explanation: "「前」は時間的な前後関係を表します。", level: "Intermediate" },
+  { id: "GRAM-057", title: "〜の後に", sw_phrase: "下班后我回家。 xiàbān hòu wǒ huí jiā.", en_phrase: "After work, I go home.", ja_trans: "仕事の後、家に帰ります。", ja_explanation: "「后」は後の動作を示します。", level: "Intermediate" },
+  { id: "GRAM-058", title: "一緒に", sw_phrase: "和我一起来吧。 hé wǒ yìqǐ lái ba.", en_phrase: "Come with me.", ja_trans: "私と一緒に来てください。", ja_explanation: "「和…一起」は同行を表します。", level: "Intermediate" },
+  { id: "GRAM-059", title: "なしで", sw_phrase: "不加糖的茶。 bù jiā táng de chá.", en_phrase: "Tea without sugar.", ja_trans: "砂糖なしのお茶。", ja_explanation: "「不＋動詞」で否定修飾します。", level: "Intermediate" },
+  { id: "GRAM-060", title: "習慣", sw_phrase: "他每天都读书。 tā měitiān dōu dúshū.", en_phrase: "He reads every day.", ja_trans: "彼は毎日読書します。", ja_explanation: "「都」は頻度や習慣を強調します。", level: "Intermediate" },
+  { id: "GRAM-061", title: "話題", sw_phrase: "我们在谈论旅行。 wǒmen zài tánlùn lǚxíng.", en_phrase: "We are talking about travel.", ja_trans: "私たちは旅行について話しています。", ja_explanation: "「谈论」は話題を示す動詞です。", level: "Intermediate" },
+  { id: "GRAM-062", title: "〜のために", sw_phrase: "这是给你的。 zhè shì gěi nǐ de.", en_phrase: "This is for you.", ja_trans: "これはあなたのためです。", ja_explanation: "「给」は対象を示します。", level: "Intermediate" },
+  { id: "GRAM-063", title: "人の修飾", sw_phrase: "正在读书的人。 zhèngzài dúshū de rén.", en_phrase: "The person who is reading.", ja_trans: "本を読んでいる人。", ja_explanation: "「的」で人を修飾します。", level: "Intermediate" },
+  { id: "GRAM-064", title: "物の修飾", sw_phrase: "我喜欢的东西。 wǒ xǐhuān de dōngxi.", en_phrase: "The thing that I like.", ja_trans: "私が好きな物。", ja_explanation: "動詞＋的＋名詞の形です。", level: "Intermediate" },
+  { id: "GRAM-065", title: "場所の修飾", sw_phrase: "我住的地方。 wǒ zhù de dìfang.", en_phrase: "The place where I live.", ja_trans: "私が住んでいる場所。", ja_explanation: "場所も「的」で修飾します。", level: "Intermediate" },
+  { id: "GRAM-066", title: "推量", sw_phrase: "也许我明天会来。 yěxǔ wǒ míngtiān huì lái.", en_phrase: "Maybe I will come tomorrow.", ja_trans: "たぶん明日来ます。", ja_explanation: "「也许」は不確かな推測です。", level: "Intermediate" },
+  { id: "GRAM-067", title: "確信", sw_phrase: "当然！ dāngrán!", en_phrase: "Of course!", ja_trans: "もちろんです！", ja_explanation: "強い肯定や同意を表します。", level: "Intermediate" },
+  { id: "GRAM-068", title: "同一", sw_phrase: "这个和那个一样。 zhège hé nàge yíyàng.", en_phrase: "This is the same as that.", ja_trans: "これはあれと同じです。", ja_explanation: "「一样」は同一性を示します。", level: "Intermediate" },
+  { id: "GRAM-069", title: "相違", sw_phrase: "这完全不一样。 zhè wánquán bù yíyàng.", en_phrase: "This is completely different.", ja_trans: "これは全く違います。", ja_explanation: "副詞「完全」で強調します。", level: "Intermediate" },
+  { id: "GRAM-070", title: "義務", sw_phrase: "我现在必须走了。 wǒ xiànzài bìxū zǒu le.", en_phrase: "I must go now.", ja_trans: "今行かなければなりません。", ja_explanation: "「必须」は強い義務を表します。", level: "Intermediate" },
+
+  /* 上級 (Advanced) */
+  { id: "GRAM-071", title: "推測の表現", sw_phrase: "好像要下雨了。 hǎoxiàng yào xiàyǔ le.", en_phrase: "It seems it will rain.", ja_trans: "雨が降りそうです。", ja_explanation: "「好像」は話し手の推測を表します。", level: "Advanced" },
+  { id: "GRAM-072", title: "仮定と後悔", sw_phrase: "要是我早知道就好了。 yàoshi wǒ zǎo zhīdào jiù hǎo le.", en_phrase: "If I had known earlier...", ja_trans: "早く知っていればよかったのに。", ja_explanation: "「要是…就好」は後悔を含む仮定表現です。", level: "Advanced" },
+  { id: "GRAM-073", title: "気づきの表現", sw_phrase: "原来如此！ yuánlái rúcǐ!", en_phrase: "I see!", ja_trans: "なるほど！", ja_explanation: "新しい事実への気づきを示します。", level: "Advanced" },
+  { id: "GRAM-074", title: "ことわざ", sw_phrase: "慢工出细活。 màn gōng chū xì huó.", en_phrase: "Haste makes waste.", ja_trans: "急がば回れ。", ja_explanation: "中国語の代表的なことわざです。", level: "Advanced" },
+  { id: "GRAM-075", title: "教訓表現", sw_phrase: "耐心带来成功。 nàixīn dàilái chénggōng.", en_phrase: "Patience brings success.", ja_trans: "忍耐は成功をもたらす。", ja_explanation: "抽象的な教訓を表します。", level: "Advanced" },
+  { id: "GRAM-076", title: "比喩の表現", sw_phrase: "他就像我的哥哥一样。 tā jiù xiàng wǒ de gēge yíyàng.", en_phrase: "He is like my brother.", ja_trans: "彼は私の兄のようです。", ja_explanation: "「像…一样」は比喩表現です。", level: "Advanced" },
+];
+
+let currentLevel = 'Beginner';
+let vIdx = 0;
+
+function setLevel(lvl) {
+    currentLevel = lvl;
+    document.querySelectorAll('.btn-lvl').forEach(b => b.classList.remove('active'));
+    document.getElementById('lvl-' + lvl).classList.add('active');
+}
+
+function showView(id) {
+    document.querySelectorAll('main > div').forEach(v => v.classList.add('hidden'));
+    document.getElementById(id + '-view').classList.remove('hidden');
+    if(id === 'vocabulary') { vIdx = 0; updateVocab(); }
+    if(id === 'grammar') updateGrammar();
+    window.scrollTo(0,0);
+}
+
+function updateVocab() {
+    const list = vocabularyData.filter(d => d.level === currentLevel);
+    if(!list.length) return;
+    const d = list[vIdx % list.length];
+    document.getElementById('v-emoji').innerText = d.emoji;
+    document.getElementById('v-zh').innerText = d.zh;
+    document.getElementById('v-en').innerText = d.en;
+    document.getElementById('v-ja').innerText = d.ja;
+}
+
+function changeVocab(dir) {
+    const list = vocabularyData.filter(d => d.level === currentLevel);
+    vIdx = (vIdx + dir + list.length) % list.length;
+    updateVocab();
+}
+
+function updateGrammar() {
+    const area = document.getElementById('grammar-list');
+    area.innerHTML = "";
+    const list = grammarData.filter(d => d.level === currentLevel);
+    list.forEach((g, i) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <div style="font-size:1.1rem; font-weight:bold; color:var(--secondary-color); margin-bottom:15px;">${g.title}</div>
+            <div class="lang-row">
+                <div class="lang-label">北京語</div>
+                <div class="lang-text"><span id="g-zh-${i}">${g.sw_phrase.split(' ')[0]}</span><button class="btn-speak" onclick="speak('g-zh-${i}','zh-CN')">🔊</button></div>
+            </div>
+            <div class="lang-row">
                 <div class="lang-label">English</div>
-                <div class="lang-text">
-                  <span id="g-en-${i}">${item.en_phrase}</span>
-                  <button class="btn-speak" onclick="speakGrammar('g-en-${i}','en')">🔊</button>
-                </div>
-              </div>
-      
-              <div class="lang-row">
+                <div class="lang-text"><span id="g-en-${i}" style="font-size:1.3rem;">${g.en_phrase}</span><button class="btn-speak" onclick="speak('g-en-${i}','en-US')">🔊</button></div>
+            </div>
+            <div class="lang-row">
                 <div class="lang-label">日本語</div>
-                <div class="lang-text">
-                  <span id="g-ja-${i}">${item.ja_trans}</span>
-                  <button class="btn-speak" onclick="speakGrammar('g-ja-${i}','ja')">🔊</button>
-                </div>
-              </div>
-      
-              <div style="font-size:0.8rem;">${item.ja_explanation}</div>
-            `;
-            area.appendChild(div);
-          });
-      }
-      
-   </script>
+                <div class="lang-text"><span id="g-ja-${i}" style="font-size:1.4rem;">${g.ja_trans}</span><button class="btn-speak" onclick="speak('g-ja-${i}','ja-JP')">🔊</button></div>
+            </div>
+            <div style="background:#f1f5f9; padding:12px; border-radius:10px; font-size:1rem; border-left:5px solid var(--secondary-color);">
+                <strong>解説:</strong> ${g.ja_explanation}
+            </div>
+        `;
+        area.appendChild(card);
+    });
+}
+
+function speak(id, lang) {
+    window.speechSynthesis.cancel();
+    const text = document.getElementById(id).innerText;
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang;
+    u.rate = 0.8;
+    window.speechSynthesis.speak(u);
+}
+
+// クエスト
+let qTarget = null;
+function startQuest() {
+    const list = vocabularyData.filter(d => d.level === currentLevel);
+    qTarget = list[Math.floor(Math.random() * list.length)];
+    document.getElementById('q-box').innerHTML = `<button class="btn-speak" onclick="speakQ()" style="width:100px; height:100px;">🔊</button>`;
+    
+    let choices = [qTarget];
+    while(choices.length < 4 && list.length >= 4) {
+        let r = list[Math.floor(Math.random() * list.length)];
+        if(!choices.includes(r)) choices.push(r);
+    }
+    choices.sort(() => Math.random() - 0.5);
+
+    const area = document.getElementById('a-grid');
+    area.innerHTML = "";
+    choices.forEach(c => {
+        const b = document.createElement('button');
+        b.className = 'btn btn-lvl';
+        b.style.minHeight = '70px';
+        b.innerText = c.ja;
+        b.onclick = () => {
+            if(c.id === qTarget.id) { alert("正解です！🌟"); startQuest(); }
+            else alert("残念、違います。");
+        };
+        area.appendChild(b);
+    });
+    speakQ();
+}
+function speakQ() {
+    const u = new SpeechSynthesisUtterance(qTarget.zh);
+    u.lang = 'zh-CN';
+    u.rate = 0.7;
+    window.speechSynthesis.speak(u);
+}
+</script>
 </body>
 </html>
