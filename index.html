@@ -108,7 +108,8 @@
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
                <button class="btn" style="background: #e2e8f0;" onclick="changeVocab(-1)">◀ 前へ</button>
-               <button class="btn btn-primary" onclick="changeVocab(1)">次へ ▶</button>
+<button class="btn" style="background: #fef3c7;" onclick="shuffleWords()">🔀 SHUFFLE</button>
+<button class="btn btn-primary" onclick="changeVocab(1)">次へ ▶</button>
             </div>
          </div>
       </div>
@@ -458,14 +459,21 @@ let vIdx = 0;
 
 function setLevel(lvl) {
     currentLevel = lvl;
+    vIdx = 0; // レベルを変えたらインデックスをリセット
     document.querySelectorAll('.btn-lvl').forEach(b => b.classList.remove('active'));
-    document.getElementById('lvl-' + lvl).classList.add('active');
+    const targetBtn = document.getElementById('lvl-' + lvl);
+    if(targetBtn) targetBtn.classList.add('active');
 }
 
 function showView(id) {
     document.querySelectorAll('main > div').forEach(v => v.classList.add('hidden'));
-    document.getElementById(id + '-view').classList.remove('hidden');
-    if(id === 'vocabulary') { vIdx = 0; updateVocab(); }
+    const targetView = document.getElementById(id + '-view');
+    if(targetView) targetView.classList.remove('hidden');
+    
+    if(id === 'vocabulary') { 
+        vIdx = 0; 
+        updateVocab(); 
+    }
     if(id === 'grammar') updateGrammar();
     window.scrollTo(0,0);
 }
@@ -473,8 +481,13 @@ function showView(id) {
 function updateVocab() {
     const list = vocabularyData.filter(d => d.level === currentLevel);
     if(!list.length) return;
-    const d = list[vIdx % list.length];
-    document.getElementById('v-emoji').innerText = d.emoji;
+    
+    // 安全策：範囲外アクセス防止
+    if (vIdx >= list.length) vIdx = 0;
+    if (vIdx < 0) vIdx = list.length - 1;
+
+    const d = list[vIdx];
+    document.getElementById('v-emoji').innerText = d.emoji || '💡';
     document.getElementById('v-zh').innerText = d.zh;
     document.getElementById('v-en').innerText = d.en;
     document.getElementById('v-ja').innerText = d.ja;
@@ -482,12 +495,25 @@ function updateVocab() {
 
 function changeVocab(dir) {
     const list = vocabularyData.filter(d => d.level === currentLevel);
+    if(!list.length) return;
     vIdx = (vIdx + dir + list.length) % list.length;
     updateVocab();
 }
 
+function shuffleWords() {
+    // 元の配列自体をシャッフル（Fisher-Yates法）
+    for (let i = vocabularyData.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [vocabularyData[i], vocabularyData[j]] = [vocabularyData[j], vocabularyData[i]];
+    }
+    vIdx = 0; // 混ぜた後は最初の単語を表示
+    updateVocab(); 
+    alert("🔀 全てのレベルの単語を混ぜ合わせました！");
+}
+
 function updateGrammar() {
     const area = document.getElementById('grammar-list');
+    if(!area) return;
     area.innerHTML = "";
     const list = grammarData.filter(d => d.level === currentLevel);
     list.forEach((g, i) => {
@@ -517,22 +543,28 @@ function updateGrammar() {
 
 function speak(id, lang) {
     window.speechSynthesis.cancel();
-    const text = document.getElementById(id).innerText;
+    const el = document.getElementById(id);
+    if(!el) return;
+    const text = el.innerText;
     const u = new SpeechSynthesisUtterance(text);
     u.lang = lang;
     u.rate = 0.8;
     window.speechSynthesis.speak(u);
 }
 
-// クエスト
 let qTarget = null;
 function startQuest() {
     const list = vocabularyData.filter(d => d.level === currentLevel);
+    if(list.length < 4) {
+        alert("クイズには少なくとも4つの単語が必要です。");
+        return;
+    }
+    
     qTarget = list[Math.floor(Math.random() * list.length)];
-    document.getElementById('q-box').innerHTML = `<button class="btn-speak" onclick="speakQ()" style="width:100px; height:100px;">🔊</button>`;
+    document.getElementById('q-box').innerHTML = `<button class="btn-speak" onclick="speakQ()" style="width:100px; height:100px; font-size:3rem !important;">🔊</button>`;
     
     let choices = [qTarget];
-    while(choices.length < 4 && list.length >= 4) {
+    while(choices.length < 4) {
         let r = list[Math.floor(Math.random() * list.length)];
         if(!choices.includes(r)) choices.push(r);
     }
@@ -546,14 +578,22 @@ function startQuest() {
         b.style.minHeight = '70px';
         b.innerText = c.ja;
         b.onclick = () => {
-            if(c.id === qTarget.id) { alert("正解です！🌟"); startQuest(); }
-            else alert("残念、違います。");
+            // idを使わず、北京語の文字列が一致するかで判定（確実）
+            if(c.zh === qTarget.zh) { 
+                alert("正解です！🌟"); 
+                startQuest(); 
+            } else {
+                alert("残念、違います。");
+            }
         };
         area.appendChild(b);
     });
     speakQ();
 }
+
 function speakQ() {
+    if(!qTarget) return;
+    window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(qTarget.zh);
     u.lang = 'zh-CN';
     u.rate = 0.7;
