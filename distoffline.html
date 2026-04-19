@@ -4,19 +4,6 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
    <title>北京語学習 - 2026 Special Edition</title>
-   <link rel="manifest" href="manifest.json">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('北京語PWA準備完了！', reg))
-        .catch(err => console.log('PWA登録失敗', err));
-    });
-  }
-</script>
    <style>
     :root {
       --bg-image: url('https://raw.githubusercontent.com/JSXAGI/mandarin-study/main/mandarin.jpg');
@@ -121,8 +108,8 @@
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
                <button class="btn" style="background: #e2e8f0;" onclick="changeVocab(-1)">◀ 前へ</button>
-<button class="btn btn-primary" onclick="changeVocab(1)">次へ ▶</button>
 <button class="btn" style="background: #fef3c7;" onclick="shuffleWords()">🔀 SHUFFLE</button>
+<button class="btn btn-primary" onclick="changeVocab(1)">次へ ▶</button>
             </div>
          </div>
       </div>
